@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "running_table")
 data class Run(
-    var image: Bitmap? = null,
+    var image: Bitmap? = null,  //Db is not made to save complex objects such as image, need type converter to save image
     var timeStamp: Long = 0L,
     var avgSpeedInKMH: Float = 0f,
     var distanceInMeters: Int = 0,
