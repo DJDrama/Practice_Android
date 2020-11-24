@@ -1,5 +1,6 @@
 package com.sensorproject.runningapp.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -7,6 +8,8 @@ import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.sensorproject.runningapp.R
+import com.sensorproject.runningapp.other.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.sensorproject.runningapp.service.TrackingService
 import com.sensorproject.runningapp.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tracking.*
@@ -26,7 +29,17 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         mapView.getMapAsync{
             map = it
         }
+
+        btnToggleRun.setOnClickListener {
+            sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
+        }
     }
+    private fun sendCommandToService(action: String) =
+        Intent(requireContext(), TrackingService::class.java).also{
+            it.action = action
+            requireContext().startService(it)
+        }
+
 
     override fun onResume() {
         super.onResume()
