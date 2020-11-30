@@ -3,6 +3,7 @@ package com.sensorproject.runningapp.ui.fragments
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sensorproject.runningapp.R
 import com.sensorproject.runningapp.adapters.RunAdapter
 import com.sensorproject.runningapp.other.Constants.REQUEST_CODE_LOCATION_PERMISSIONS
+import com.sensorproject.runningapp.other.SortType
 import com.sensorproject.runningapp.other.TrackingUtility
 import com.sensorproject.runningapp.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +32,28 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         requestPermissions()
         setupRecyclerview()
 
-        viewModel.runSortedByDate.observe(viewLifecycleOwner){
+        when(viewModel.sortType){
+            SortType.DATE-> spFilter.setSelection(0)
+            SortType.RUNNING_TIME -> spFilter.setSelection(1)
+            SortType.DISTANCE -> spFilter.setSelection(2)
+            SortType.AVG_SPEED -> spFilter.setSelection(3)
+            SortType.CALORIES_BURNED -> spFilter.setSelection(4)
+        }
+
+        spFilter.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                when(pos){
+                    0->viewModel.sortRuns(SortType.DATE)
+                    1->viewModel.sortRuns(SortType.RUNNING_TIME)
+                    2->viewModel.sortRuns(SortType.DISTANCE)
+                    3->viewModel.sortRuns(SortType.AVG_SPEED)
+                    4->viewModel.sortRuns(SortType.CALORIES_BURNED)
+                }
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
+        viewModel.runs.observe(viewLifecycleOwner){
             runAdapter.submitList(it)
         }
         fab.setOnClickListener {
