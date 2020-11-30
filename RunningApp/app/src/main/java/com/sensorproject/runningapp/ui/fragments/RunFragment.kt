@@ -3,10 +3,13 @@ package com.sensorproject.runningapp.ui.fragments
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sensorproject.runningapp.R
+import com.sensorproject.runningapp.adapters.RunAdapter
 import com.sensorproject.runningapp.other.Constants.REQUEST_CODE_LOCATION_PERMISSIONS
 import com.sensorproject.runningapp.other.TrackingUtility
 import com.sensorproject.runningapp.ui.viewmodels.MainViewModel
@@ -19,20 +22,33 @@ import pub.devrel.easypermissions.EasyPermissions
 class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionCallbacks {
 
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var runAdapter: RunAdapter
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestPermissions()
-        fab.setOnClickListener{
+        setupRecyclerview()
+
+        viewModel.runSortedByDate.observe(viewLifecycleOwner){
+            runAdapter.submitList(it)
+        }
+        fab.setOnClickListener {
             findNavController().navigate(R.id.action_runFragment_to_trackingFragment)
         }
     }
 
-    private fun requestPermissions(){
-        if(TrackingUtility.hasLocationPermissions(requireContext())){
+    private fun setupRecyclerview() = rvRuns.apply {
+        runAdapter = RunAdapter()
+        adapter = runAdapter
+        layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun requestPermissions() {
+        if (TrackingUtility.hasLocationPermissions(requireContext())) {
             return
         }
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             EasyPermissions.requestPermissions(
                 this,
                 "You need to accept locatino permissions to use this app.",
@@ -40,7 +56,7 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
                 android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             )
-        }else{
+        } else {
             EasyPermissions.requestPermissions(
                 this,
                 "You need to accept locatino permissions to use this app.",
@@ -57,9 +73,9 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if(EasyPermissions.somePermissionPermanentlyDenied(this, perms)){
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog.Builder(this).build().show()
-        }else{
+        } else {
             requestPermissions()
         }
     }
