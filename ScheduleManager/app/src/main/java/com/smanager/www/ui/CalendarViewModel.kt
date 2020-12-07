@@ -24,6 +24,8 @@ constructor(
     val allEvents: LiveData<HashMap<LocalDate, List<Event>>>
         get() = _allEvents
 
+    private var _currEvent = MutableLiveData<Event>()
+
     private var hour: Int? = null
     private var minute: Int? = null
 
@@ -52,14 +54,21 @@ constructor(
     fun getHour(): Int? = hour
     fun getMinute(): Int? = minute
 
-    fun addEvent(event: Event) {
-        hour?.let { h ->
-            event.hour = h
-            minute?.let { m ->
-                event.minute = m
-                viewModelScope.launch {
-                    _insertedId.value = calendarRepository.insertEvent(event)
-                    getAllEventsByDate(event.localDate)
+    fun setCurrentEvent(event: Event){
+        _currEvent.value = event
+    }
+    fun getCurrentEvent() = _currEvent.value
+    fun addEvent() {
+        val event = _currEvent.value
+        event?.let {e->
+            hour?.let { h ->
+                e.hour = h
+                minute?.let { m ->
+                    e.minute = m
+                    viewModelScope.launch {
+                        _insertedId.value = calendarRepository.insertEvent(event)
+                        getAllEventsByDate(event.localDate)
+                    }
                 }
             }
         }

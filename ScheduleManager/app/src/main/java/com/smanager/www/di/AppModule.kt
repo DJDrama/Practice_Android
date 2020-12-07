@@ -32,5 +32,4 @@ object AppModule {
     @Provides
     fun provideEventDao(db: AppDatabase) = db.getEventDao()
 
-
 }

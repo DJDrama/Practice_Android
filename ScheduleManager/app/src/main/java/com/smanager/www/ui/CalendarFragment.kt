@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -256,32 +257,34 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         viewModel.getHour()?.let { h ->
             viewModel.getMinute()?.let { m ->
                 val calendar = Calendar.getInstance(Locale.KOREA)
-                calendar.set(Calendar.HOUR_OF_DAY, h)
-                calendar.set(Calendar.MINUTE, m)
+                val event = viewModel.getCurrentEvent()
+                event?.let {
+                    it.localDate.apply {
+                        calendar.set(year, monthValue-1, dayOfMonth, h, m)
+                    }
+                    val pm = requireContext().packageManager
+                    val receiver = ComponentName(requireContext(), DeviceBootReceiver::class.java)
+                    val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
+                    alarmIntent.putExtra("id", id)
+                    val pendingIntent =
+                        PendingIntent.getBroadcast(requireContext(), id.toInt(), alarmIntent, 0)
 
-                val pm = requireContext().packageManager
-                val receiver = ComponentName(requireContext(), DeviceBootReceiver::class.java)
-                val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
-                alarmIntent.putExtra("id", id)
-                val pendingIntent =
-                    PendingIntent.getBroadcast(requireContext(), id.toInt(), alarmIntent, 0)
+                    val alarmManager =
+                        requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-                val alarmManager =
-                    requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        pendingIntent
+                    )
 
-
-                alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    pendingIntent
-                )
-
-                // make receiver runnable after rebooting
-                pm.setComponentEnabledSetting(
-                    receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP
-                )
+                    // make receiver runnable after rebooting
+                    pm.setComponentEnabledSetting(
+                        receiver,
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
+                }
             }
         }
     }
@@ -291,17 +294,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             Toast.makeText(requireContext(), "Please input title", Toast.LENGTH_LONG).show()
         } else {
             selectedDate?.let {
-                viewModel.addEvent(Event(text, it))
+                viewModel.setCurrentEvent(Event(text, it))
+                viewModel.addEvent()
                 //events[it] = events[it].orEmpty().plus(Event(text, it))
-                addAlarm()
                 updateAdapterForDate(it)
             }
         }
     }
 
-    fun addAlarm() {
-
-    }
 
     private fun deleteEvent(event: Event) {
         val date = event.localDate
