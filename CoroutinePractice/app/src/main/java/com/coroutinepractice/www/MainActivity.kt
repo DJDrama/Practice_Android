@@ -13,10 +13,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        GlobalScope.launch{ // will be destroyed when main activity gets destroyed
-            delay(3000L) // 3 seconds (Only pauses the current coroutine)
-            Log.d(TAG, "GlobalScope: Hello From ${Thread.currentThread().name}") // Dispatcher-worker
+        GlobalScope.launch {
+            delay(1000L) // suspend function (only called inside a suspend fun or from a coroutine)
+            val networkCallAnswer = doNetworkCall()
+            val networkCallAnswer2 = doNetworkCall2()
+
+            // since two methods are in a same coroutine, despite of different functions,
+            // delay(3000L) will be add up to delay(6000L)
+            Log.d(TAG, networkCallAnswer)
+            Log.d(TAG, networkCallAnswer2)
+
         }
-        Log.d(TAG, "Main Thread: Hello from ${Thread.currentThread().name}") // Main Thread
+    }
+
+    suspend fun doNetworkCall(): String {
+        delay(3000L)
+        return "This is the answer"
+    }
+
+    suspend fun doNetworkCall2(): String {
+        delay(3000L)
+        return "This is the answer2"
     }
 }
