@@ -1,8 +1,11 @@
 package com.smanager.www.di
 
 import android.content.Context
+import androidx.core.app.NotificationCompat
 import androidx.room.Room
+import com.smanager.www.R
 import com.smanager.www.db.AppDatabase
+import com.smanager.www.others.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
