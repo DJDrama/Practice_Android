@@ -1,7 +1,14 @@
 package com.smanager.www.ui
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +20,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -168,7 +176,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                             textView.setTextColorRes(R.color.black_like)
                             textView.background = null
                             dotView.isVisible = false
-                                //events[day.date].orEmpty().isNotEmpty()
+                            //events[day.date].orEmpty().isNotEmpty()
                         }
                     }
                 } else {
@@ -179,11 +187,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
 
         binding.exThreeCalendar.monthScrollListener = {
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = if (it.year == today.year) {
-                titleSameYearFormatter.format(it.yearMonth)
-            } else {
-                titleFormatter.format(it.yearMonth)
-            }
+            (requireActivity() as AppCompatActivity).supportActionBar?.title =
+                if (it.year == today.year) {
+                    titleSameYearFormatter.format(it.yearMonth)
+                } else {
+                    titleFormatter.format(it.yearMonth)
+                }
 
             // Select the first day of the month when
             // we scroll to a new month.
@@ -200,10 +209,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 // Setup each header day text if we have not done that already.
                 if (container.legendLayout.tag == null) {
                     container.legendLayout.tag = month.yearMonth
-                    container.legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
-                        tv.text = daysOfWeek[index].name.first().toString()
-                        tv.setTextColorRes(R.color.black_like)
-                    }
+                    container.legendLayout.children.map { it as TextView }
+                        .forEachIndexed { index, tv ->
+                            tv.text = daysOfWeek[index].name.first().toString()
+                            tv.setTextColorRes(R.color.black_like)
+                        }
                 }
             }
         }
@@ -215,7 +225,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
         subscribeToObservers()
     }
-    private fun showTimePicker(){
+
+    private fun showTimePicker() {
         val currentDate = Calendar.getInstance()
         TimePickerDialog(
             requireContext(),
@@ -226,13 +237,52 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false
         ).show()
     }
-    private fun subscribeToObservers(){
-        viewModel.eventListLiveData.observe(viewLifecycleOwner){
+
+    private fun subscribeToObservers() {
+        viewModel.eventListLiveData.observe(viewLifecycleOwner) {
             eventsAdapter.submitList(it)
         }
 
-        viewModel.allEvents.observe(viewLifecycleOwner){
+        viewModel.allEvents.observe(viewLifecycleOwner) {
 
+        }
+
+        viewModel.insertedId.observe(viewLifecycleOwner) {
+            addAlarm(it)
+        }
+    }
+
+    private fun addAlarm(id: Long) {
+        viewModel.getHour()?.let { h ->
+            viewModel.getMinute()?.let { m ->
+                val calendar = Calendar.getInstance(Locale.KOREA)
+                calendar.set(Calendar.HOUR_OF_DAY, h)
+                calendar.set(Calendar.MINUTE, m)
+
+                val pm = requireContext().packageManager
+                val receiver = ComponentName(requireContext(), DeviceBootReceiver::class.java)
+                val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
+                alarmIntent.putExtra("id", id)
+                val pendingIntent =
+                    PendingIntent.getBroadcast(requireContext(), id.toInt(), alarmIntent, 0)
+
+                val alarmManager =
+                    requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+
+                // make receiver runnable after rebooting
+                pm.setComponentEnabledSetting(
+                    receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            }
         }
     }
 
@@ -243,9 +293,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             selectedDate?.let {
                 viewModel.addEvent(Event(text, it))
                 //events[it] = events[it].orEmpty().plus(Event(text, it))
+                addAlarm()
                 updateAdapterForDate(it)
             }
         }
+    }
+
+    fun addAlarm() {
+
     }
 
     private fun deleteEvent(event: Event) {
@@ -268,6 +323,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
         viewModel.getAllEventsByDate(localDate = date)
     }
+
     private fun updateAdapterForDate(date: LocalDate) {
         viewModel.getAllEventsByDate(date)
         binding.exThreeSelectedDateText.text = selectionFormatter.format(date)
