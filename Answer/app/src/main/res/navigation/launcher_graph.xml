@@ -8,25 +8,27 @@
     <fragment
         android:id="@+id/introSplashFragment"
         android:name="com.answer.univ.ui.launcher.IntroSplashFragment"
-        tools:layout="@layout/fragment_intro_splash"
-        android:label="IntroSplashFragment" >
+        android:label="IntroSplashFragment"
+        tools:layout="@layout/fragment_intro_splash">
         <action
-            android:id="@+id/action_introSplashFragment_to_loginFragment2"
+            android:id="@+id/action_introSplashFragment_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:popUpTo="@id/introSplashFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        tools:layout="@layout/fragment_login"
-        android:label="LoginFragment" >
+        android:name="com.answer.univ.ui.launcher.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment2_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/registrationFragment"
-        tools:layout="@layout/fragment_register"
+        android:id="@+id/registerFragment"
         android:name="com.answer.univ.ui.launcher.RegisterFragment"
-        android:label="@string/label_fragment_register" />
+        android:label="@string/label_fragment_register"
+        tools:layout="@layout/fragment_register" />
 </navigation>
