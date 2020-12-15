@@ -7,10 +7,12 @@
     <string name="register_desc">아직 계정이 없으신가요?</string>
     <string name="register">회원가입</string>
     <string name="hint_input_password_check">비밀번호 확인</string>
-    <string name="member_information">회원정보</string>
+    <string name="member_information">회원 정보</string>
     <string name="hint_phone_number">핸드폰 번호</string>
     <string name="hint_input_name">이름</string>
     <string name="member_id_password">가입 정보</string>
     <string name="hint_nickname">닉네임</string>
     <string name="input_phone_desc" >* 이벤트당첨시 기재된 번호로 경품이 발송되니 정확히 입력해주세요.</string>
+    <string name="school_information">학교 정보</string>
+    <string name="interest_information">관심 사항</string>
 </resources>

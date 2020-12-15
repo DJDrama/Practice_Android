@@ -1,4 +1,4 @@
-package com.answer.univ.model
+package com.answer.univ.di
 
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
