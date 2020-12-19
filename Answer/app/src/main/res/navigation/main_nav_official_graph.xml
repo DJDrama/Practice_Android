@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/officialFragment"
         android:name="com.answer.univ.ui.main.official.OfficialFragment"
-        android:label="fragment_official"
+        android:label="@string/label_fragment_official"
         tools:layout="@layout/fragment_official" />
 </navigation>

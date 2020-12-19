@@ -7,6 +7,6 @@
     <fragment
         android:id="@+id/codingFragment"
         android:name="com.answer.univ.ui.main.coding.CodingFragment"
-        android:label="fragment_coding"
+        android:label="@string/label_fragment_coding"
         tools:layout="@layout/fragment_coding" />
 </navigation>

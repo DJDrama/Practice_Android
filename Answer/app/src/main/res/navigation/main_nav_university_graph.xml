@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/universityFragment"
         android:name="com.answer.univ.ui.main.university.UniversityFragment"
-        android:label="fragment_university"
+        android:label="@string/label_fragment_university"
         tools:layout="@layout/fragment_university" />
 </navigation>

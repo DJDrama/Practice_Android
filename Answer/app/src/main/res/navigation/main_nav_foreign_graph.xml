@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/languageFragment"
         android:name="com.answer.univ.ui.main.language.LanguageFragment"
-        android:label="fragment_language"
+        android:label="@string/label_fragment_foreign"
         tools:layout="@layout/fragment_language" />
 </navigation>

@@ -21,4 +21,9 @@
     <string name="bottom_nav_official">공무원</string>
     <string name="bottom_nav_foreign_language">외국어</string>
     <string name="bottom_nav_coding">코딩</string>
+    <string name="label_fragment_home">홈</string>
+    <string name="label_fragment_coding">코딩</string>
+    <string name="label_fragment_foreign">외국어</string>
+    <string name="label_fragment_official">공무원</string>
+    <string name="label_fragment_university">대학생</string>
 </resources>
