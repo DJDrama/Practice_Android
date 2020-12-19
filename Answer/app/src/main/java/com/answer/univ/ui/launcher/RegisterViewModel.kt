@@ -1,11 +1,10 @@
 package com.answer.univ.ui.launcher
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.answer.univ.repository.LauncherRepository
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class RegisterViewModel
 @ViewModelInject
@@ -24,4 +23,28 @@ constructor(
         _interests.value = launcherRepository.getInterests()
     }
 
+
+    fun register(
+        email: String,
+        password: String,
+        name: String,
+        nickName: String,
+        phoneNumber: String,
+        university: String,
+        major: String,
+        interest: String
+    ) {
+        viewModelScope.launch(IO){
+            launcherRepository.register(
+                email,
+                password,
+                name,
+                nickName,
+                phoneNumber,
+                university,
+                major,
+                interest
+            )
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.answer.univ.ui
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 
@@ -19,3 +20,5 @@ fun Activity.hideActionBar(){
 fun Activity.showActionBar(){
     (this as AppCompatActivity).supportActionBar?.show()
 }
+
+fun String.isBlankOrEmpty() = isBlank() || isEmpty()
