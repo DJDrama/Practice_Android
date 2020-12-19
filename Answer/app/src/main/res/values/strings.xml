@@ -15,4 +15,5 @@
     <string name="input_phone_desc" >* 이벤트당첨시 기재된 번호로 경품이 발송되니 정확히 입력해주세요.</string>
     <string name="school_information">학교 정보</string>
     <string name="interest_information">관심 사항</string>
+    <string name="input_department">학과/전공을 입력해주세요.</string>
 </resources>

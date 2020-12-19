@@ -3,6 +3,7 @@ package com.answer.univ.di
 import android.content.Context
 import com.answer.univ.repository.LauncherRepository
 import com.answer.univ.repository.LauncherRepositoryImpl
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +18,6 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideLauncherRepository(
-        @ApplicationContext app: Context
-    ) : LauncherRepository = LauncherRepositoryImpl(app)
+        firebaseAuth: FirebaseAuth
+    ) : LauncherRepository = LauncherRepositoryImpl()
 }

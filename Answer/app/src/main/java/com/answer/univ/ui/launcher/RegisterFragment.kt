@@ -13,7 +13,7 @@ import com.answer.univ.ui.showActionBar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment(R.layout.fragment_register) {
+class RegisterFragment : Fragment(R.layout.fragment_register), View.OnClickListener {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RegisterViewModel by viewModels()
@@ -22,22 +22,37 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentRegisterBinding.bind(view)
         requireActivity().showActionBar()
-
-
-        setUniversitySpinner()
+        binding.btnRegister.setOnClickListener(this)
+        subscribeToObservers()
     }
 
-    private fun setUniversitySpinner() {
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            viewModel.universities
-        )
-        binding.spinnerUniversities.adapter = adapter
+    private fun subscribeToObservers() {
+        viewModel.universities.observe(viewLifecycleOwner) {
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                it.toList()
+            )
+            binding.spinnerUniversities.adapter = adapter
+        }
+        viewModel.interests.observe(viewLifecycleOwner) {
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                it
+            )
+            binding.spinnerInterest.adapter = adapter
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(p0: View?) {
+        if(p0 == binding.btnRegister){
+
+        }
     }
 }
