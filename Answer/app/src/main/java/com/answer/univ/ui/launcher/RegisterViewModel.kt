@@ -11,6 +11,11 @@ class RegisterViewModel
 constructor(
     private val launcherRepository: LauncherRepository
 ) : ViewModel() {
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
+
+    private val _registerSuccess = MutableLiveData<Boolean>()
+    val registerSuccess: LiveData<Boolean> get()=_registerSuccess
 
     private val _universities = MutableLiveData<Set<String>>()
     val universities: LiveData<Set<String>> get() = _universities
@@ -35,7 +40,7 @@ constructor(
         interest: String
     ) {
         viewModelScope.launch(IO){
-            launcherRepository.register(
+           val result = launcherRepository.register(
                 email,
                 password,
                 name,
@@ -45,6 +50,12 @@ constructor(
                 major,
                 interest
             )
+            result.error?.let{
+                _error.postValue(it)
+            } ?: if(result.isSuccess){
+                _registerSuccess.postValue(true)
+            }
         }
     }
 }
+

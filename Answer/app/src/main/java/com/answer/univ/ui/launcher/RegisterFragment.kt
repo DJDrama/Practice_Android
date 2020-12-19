@@ -1,5 +1,6 @@
 package com.answer.univ.ui.launcher
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,9 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.answer.univ.R
 import com.answer.univ.databinding.FragmentRegisterBinding
-import com.answer.univ.ui.isBlankOrEmpty
-import com.answer.univ.ui.showActionBar
-import com.answer.univ.ui.showSnackBar
+import com.answer.univ.ui.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,6 +44,18 @@ class RegisterFragment : Fragment(R.layout.fragment_register), View.OnClickListe
             )
             binding.spinnerInterest.adapter = adapter
         }
+        viewModel.error.observe(viewLifecycleOwner) {
+            binding.root.showSnackBar(it)
+        }
+        viewModel.registerSuccess.observe(viewLifecycleOwner) {
+            if (it) {
+                requireContext().showToast("회원가입이 완료되었습니다.")
+                Intent(requireActivity(), MainActivity::class.java).also { intent ->
+                    startActivity(intent)
+                }
+                requireActivity().finish()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -54,6 +65,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register), View.OnClickListe
 
     override fun onClick(p0: View?) {
         if (p0 == binding.btnRegister) {
+            requireContext().hideKeyboard(p0)
+
             val email = binding.edtEmailAddress.text.toString()
             val password = binding.edtPassword.text.toString()
             val passwordCheck = binding.edtPasswordCheck.text.toString()

@@ -4,6 +4,8 @@ import com.answer.univ.data.Result
 import com.answer.univ.data.UNKNOWN_ERROR
 import com.answer.univ.data.getInterestList
 import com.answer.univ.data.getUniversityList
+import com.answer.univ.util.Constants.Companion.USERS
+import com.answer.univ.util.md5
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -51,8 +53,25 @@ class LauncherRepositoryImpl(
     ): Result {
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            result.user?.let {
-                Result(true)
+            result.user?.let { user ->
+                //Result(true)
+                //next save rest to database
+                val userData = hashMapOf(
+                    "email" to email,
+                    "password" to password.md5(),
+                    "name" to name,
+                    "nickname" to nickName,
+                    "phone" to phoneNum,
+                    "university" to university,
+                    "major" to major,
+                    "interest" to interest
+                )
+                try {
+                    firebaseFirestore.collection(USERS).document(user.uid).set(userData).await()
+                    Result(true)
+                } catch (e: Exception) {
+                    Result(false, e.toString())
+                }
             } ?: Result(false, UNKNOWN_ERROR)
         } catch (e: Exception) {
             when (e) {

@@ -11,6 +11,7 @@ import com.answer.univ.R
 import com.answer.univ.databinding.FragmentLoginBinding
 import com.answer.univ.ui.MainActivity
 import com.answer.univ.ui.hideActionBar
+import com.answer.univ.ui.hideKeyboard
 import com.answer.univ.ui.showSnackBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -66,6 +67,7 @@ class LoginFragment : Fragment(R.layout.fragment_login), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v) {
             binding.buttonLogin -> {
+                requireContext().hideKeyboard(v)
                 login()
             }
             binding.tvRegister -> {
