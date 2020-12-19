@@ -16,4 +16,9 @@
     <string name="school_information">학교 정보</string>
     <string name="interest_information">관심 사항</string>
     <string name="input_department">학과/전공을 입력해주세요.</string>
+    <string name="bottom_nav_home">홈</string>
+    <string name="bottom_nav_university">대학생</string>
+    <string name="bottom_nav_official">공무원</string>
+    <string name="bottom_nav_foreign_language">외국어</string>
+    <string name="bottom_nav_coding">코딩</string>
 </resources>

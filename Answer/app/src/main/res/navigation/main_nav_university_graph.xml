@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_university_graph"
+    app:startDestination="@id/universityFragment">
+
+    <fragment
+        android:id="@+id/universityFragment"
+        android:name="com.answer.univ.ui.main.university.UniversityFragment"
+        android:label="fragment_university"
+        tools:layout="@layout/fragment_university" />
+</navigation>

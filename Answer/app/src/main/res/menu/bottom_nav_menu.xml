@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_nav_home_graph"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="@string/bottom_nav_home" />
+
+    <item
+        android:id="@+id/main_nav_university_graph"
+        android:icon="@drawable/ic_baseline_school_24"
+        android:title="@string/bottom_nav_university" />
+
+    <item
+        android:id="@+id/main_nav_official_graph"
+        android:icon="@drawable/ic_baseline_account_balance_24"
+        android:title="@string/bottom_nav_official" />
+
+    <item
+        android:id="@+id/main_nav_foreign_graph"
+        android:icon="@drawable/ic_baseline_language_24"
+        android:title="@string/bottom_nav_foreign_language" />
+
+    <item
+        android:id="@+id/main_nav_coding_graph"
+        android:icon="@drawable/ic_baseline_keyboard_24"
+        android:title="@string/bottom_nav_coding" />
+
+</menu>
