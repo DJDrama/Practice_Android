@@ -19,5 +19,5 @@ interface LauncherRepository {
         university: String,
         major: String,
         interest: String
-    )
+    ): Result
 }

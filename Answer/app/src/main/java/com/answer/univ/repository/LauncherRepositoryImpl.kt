@@ -4,9 +4,7 @@ import com.answer.univ.data.Result
 import com.answer.univ.data.UNKNOWN_ERROR
 import com.answer.univ.data.getInterestList
 import com.answer.univ.data.getUniversityList
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -50,10 +48,27 @@ class LauncherRepositoryImpl(
         university: String,
         major: String,
         interest: String
-    ) {
-        val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-
+    ): Result {
+        return try {
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            result.user?.let {
+                Result(true)
+            } ?: Result(false, UNKNOWN_ERROR)
+        } catch (e: Exception) {
+            when (e) {
+                is FirebaseAuthInvalidCredentialsException -> {
+                    Result(false, "이메일 주소가 옳바르지 않습니다.")
+                }
+                is FirebaseAuthWeakPasswordException -> {
+                    Result(false, "비밀번호는 최소 6자리 이상이여야 합니다.")
+                }
+                is FirebaseAuthUserCollisionException -> {
+                    Result(false, "이미 가입되어 있는 이메일 주소입니다.")
+                }
+                else -> {
+                    Result(false, UNKNOWN_ERROR)
+                }
+            }
+        }
     }
-
-
 }
