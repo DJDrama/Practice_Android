@@ -26,4 +26,12 @@
     <string name="label_fragment_foreign">외국어</string>
     <string name="label_fragment_official">공무원</string>
     <string name="label_fragment_university">대학생</string>
+    <string name="drawer_my_page">마이페이지</string>
+    <string name="drawer_use_point" >포인트 사용</string>
+    <string name="drawer_service_inquiry">서비스 문의</string>
+    <string name="drawer_notice">공지사항</string>
+    <string name="drawer_setting">설정</string>
+    <string name="start">Start</string>
+    <string name="close">Close</string>
+    <string name="bottom_nav_others">더보기</string>
 </resources>
