@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">IntroduceMySelfSample</string>
+    <string name="app_name">김우겸의 자기소개</string>
+    <string name="about_myself">나의 소개</string>
+    <string name="my_album">나의 앨범</string>
+    <string name="my_masterpiece">나의 작품</string>
+    <string name="close_app">앱 종료</string>
+    <string name="copyright">Copyright 김우겸 2020</string>
+    <string name="name_text">1: 이름: 김우겸</string>
+    <string name="nickname_text">2. 별명: 겸이</string>
+    <string name="pros_text">3. 장점: 포기를 모르는, 강한 도전정신!</string>
+    <string name="cons_text">4. 단점: 약한 멘탈</string>
+    <string name="others_text">5. 좌우명이나 하고 싶은 말: 열심히 살아가자!</string>
+    <string name="go_to_main">메인으로</string>
 </resources>
