@@ -1,10 +1,13 @@
-package com.introducemyselfsample.www
+package com.introducemyselfsample.www.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.introducemyselfsample.www.ui.album.MyAlbumActivity
 import com.introducemyselfsample.www.databinding.ActivityMainBinding
+import com.introducemyselfsample.www.ui.intro.AboutMySelfActivity
+import com.introducemyselfsample.www.ui.masterpiece.MyMasterpieceActivity
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {

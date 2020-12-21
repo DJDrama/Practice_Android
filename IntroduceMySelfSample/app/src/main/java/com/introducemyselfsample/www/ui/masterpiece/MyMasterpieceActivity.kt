@@ -1,8 +1,7 @@
-package com.introducemyselfsample.www
+package com.introducemyselfsample.www.ui.masterpiece
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.introducemyselfsample.www.databinding.ActivityMyAlbumBinding
 import com.introducemyselfsample.www.databinding.ActivityMyMasterpeieceBinding
 
 class MyMasterpieceActivity : AppCompatActivity() {
@@ -11,5 +10,9 @@ class MyMasterpieceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMyMasterpeieceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.button5.setOnClickListener {
+            finish()
+        }
     }
 }

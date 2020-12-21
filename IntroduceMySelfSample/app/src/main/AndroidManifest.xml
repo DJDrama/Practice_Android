@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IntroduceMySelfSample">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,13 +19,13 @@
         </activity>
 
         <activity
-            android:name=".AboutMySelfActivity"
+            android:name="com.introducemyselfsample.www.ui.intro.AboutMySelfActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MyAlbumActivity"
+            android:name="com.introducemyselfsample.www.ui.album.MyAlbumActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MyMasterpieceActivity"
+            android:name="com.introducemyselfsample.www.ui.masterpiece.MyMasterpieceActivity"
             android:screenOrientation="portrait" />
     </application>
 

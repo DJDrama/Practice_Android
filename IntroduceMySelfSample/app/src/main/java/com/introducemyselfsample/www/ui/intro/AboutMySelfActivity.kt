@@ -1,4 +1,4 @@
-package com.introducemyselfsample.www
+package com.introducemyselfsample.www.ui.intro
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
