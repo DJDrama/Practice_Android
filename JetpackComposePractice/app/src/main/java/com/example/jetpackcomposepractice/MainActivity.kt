@@ -16,62 +16,14 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            ScrollableColumn(
-                modifier = Modifier
-//                    .fillMaxHeight()
-//                    .fillMaxWidth()
-                    .fillMaxSize()
-                    .background(color = Color(0xFFF2F2F2))
-            ) {
-                Image(
-                    bitmap = imageFromResource(resources, resId = R.drawable.happy_meal_small),
-                    modifier = Modifier.height(300.dp),
-                    contentScale = ContentScale.Crop
-                )
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "Happy Meal",
-                            style = TextStyle(
-                                fontSize = TextUnit.Companion.Sp(26)
-                            )
-                        )
-                        Text(
-                            text = "₩4,500",
-                            style = TextStyle(
-                                color = Color(0xFF85bb65),
-                                fontSize = TextUnit.Companion.Sp(17)
-                            ),
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.padding(top = 10.dp))
-                    Text(
-                        text = "800 Calories",
-                        style = TextStyle(
-                            fontSize = TextUnit.Companion.Sp(17)
-                        )
-                    )
-                    Spacer(modifier = Modifier.padding(top = 10.dp))
-                    Button(
-                        onClick = {},
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(text = "Order Now!")
-                    }
-                }
-            }
-        }
+        setContentView(R.layout.activity_main)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, RecipeListFragment())
+            .commit()
     }
 }
