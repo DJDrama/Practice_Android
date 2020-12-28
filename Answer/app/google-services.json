@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "457735327837",
+    "firebase_url": "https://answer-e4aeb.firebaseio.com",
+    "project_id": "answer-e4aeb",
+    "storage_bucket": "answer-e4aeb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457735327837:android:9d297249ac1147e8",
+        "android_client_info": {
+          "package_name": "com.answer.univ"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "457735327837-c68c3jtu8hu8nloueliqaov1pugqm08k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.answer.univ",
+            "certificate_hash": "e3c73096230b12143c7745d539d3b9dbf4581bf7"
+          }
+        },
+        {
+          "client_id": "457735327837-d5r1v449v1ladl5jju84oc0u4abmgrvt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.answer.univ",
+            "certificate_hash": "8235d3c3cad0648c6d3e6b7cd375b5379b5523bf"
+          }
+        },
+        {
+          "client_id": "457735327837-ufr0r0o3n6ndlgm35vaf5kaubbauute3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.answer.univ",
+            "certificate_hash": "b2dccdcdaf811809b31c78fbe95211c6d8164606"
+          }
+        },
+        {
+          "client_id": "457735327837-gf7cdvt9nre23ps01b88fmri82bhfklf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFGMnxxU6Kh3RSlc0IPlZlwFuXQ9sqLvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "457735327837-gf7cdvt9nre23ps01b88fmri82bhfklf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -60,6 +60,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     private val titleSameYearFormatter = DateTimeFormatter.ofPattern("MMMM")
     private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
     private val selectionFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+    private val events = mutableMapOf<LocalDate, List<Event>>()
 
     private val viewModel by viewModels<CalendarViewModel>()
     private val eventsAdapter = EventAdapter {
@@ -176,8 +177,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                         else -> {
                             textView.setTextColorRes(R.color.black_like)
                             textView.background = null
-                            dotView.isVisible = false
-                            //events[day.date].orEmpty().isNotEmpty()
+                            dotView.isVisible = events[day.date].orEmpty().isNotEmpty()
                         }
                     }
                 } else {
@@ -244,8 +244,16 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             eventsAdapter.submitList(it)
         }
 
-        viewModel.allEvents.observe(viewLifecycleOwner) {
-
+        viewModel.allEvents.observe(viewLifecycleOwner) {list->
+//            val map = mutableMapOf<LocalDate, MutableList<Event>>()
+//            list.forEach { e ->
+//                if (map.containsKey(e.localDate)) {
+//                    map[e.localDate]?.add(e)
+//                } else {
+//                    map[e.localDate] = mutableListOf()
+//                }
+//            }
+//            binding.exThreeCalendar.notifyCalendarChanged()
         }
 
         viewModel.insertedId.observe(viewLifecycleOwner) {
