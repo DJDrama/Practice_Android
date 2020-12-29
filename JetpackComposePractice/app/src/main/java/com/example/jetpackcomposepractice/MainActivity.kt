@@ -26,10 +26,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val mapper = RecipeNetworkMapper()
-        val recipe = Recipe()
 
-        val networkEntity: RecipeNetworkEntity = mapper.mapToEntity(recipe)
-        val r: Recipe = mapper.mapFromEntity(networkEntity)
     }
 }
