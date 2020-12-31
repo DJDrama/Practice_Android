@@ -3,8 +3,13 @@ package com.example.jetpackcomposepractice.repository
 import com.example.jetpackcomposepractice.domain.model.Recipe
 import com.example.jetpackcomposepractice.network.RecipeService
 import com.example.jetpackcomposepractice.network.model.RecipeDtoMapper
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RecipeRepository_Impl(
+//@Singleton
+class RecipeRepository_Impl
+//@Inject
+constructor(
     private val recipeService: RecipeService,
     private val mapper: RecipeDtoMapper
 ) : RecipeRepository {
