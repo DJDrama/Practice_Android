@@ -1,8 +1,9 @@
-package com.example.jetpackcomposepractice
+package com.example.jetpackcomposepractice.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.jetpackcomposepractice.R
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

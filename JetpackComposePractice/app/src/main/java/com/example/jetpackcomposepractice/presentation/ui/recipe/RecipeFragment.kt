@@ -1,13 +1,11 @@
-package com.example.jetpackcomposepractice
+package com.example.jetpackcomposepractice.presentation.ui.recipe
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -15,10 +13,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.fragment.app.activityViewModels
+import com.example.jetpackcomposepractice.presentation.ui.recipe_list.RecipeListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class RecipeListFragment : Fragment() {
-
+@AndroidEntryPoint
+class RecipeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,15 +28,12 @@ class RecipeListFragment : Fragment() {
             setContent {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Recipe List",
-                        style = TextStyle(fontSize = TextUnit.Companion.Sp(21))
+                        text = "Recipe Fragment",
+                        style = TextStyle(
+                            fontSize = TextUnit.Sp(21)
+                        )
                     )
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Button(onClick = {
-                        findNavController().navigate(R.id.action_recipeListFragment_to_recipeFragment)
-                    }) {
-                        Text("To Recipe Fragment")
-                    }
+
                 }
             }
         }
