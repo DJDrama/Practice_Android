@@ -1,6 +1,7 @@
 package com.example.jetpackcomposepractice.presentation.ui.recipe_list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,11 @@ class RecipeListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+                val recipes = viewModel.recipes.value
+                for(recipe in recipes){
+                    Log.e("RecipeListFragment", "Check : $recipe")
+                }
+
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "Recipe List",
@@ -49,10 +55,4 @@ class RecipeListFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.recipes.observe(viewLifecycleOwner){
-
-        }
-    }
 }

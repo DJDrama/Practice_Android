@@ -10,13 +10,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    /** Field Injection **/
-    @Inject
-    lateinit var str: String
-
-    @Inject
-    lateinit var app: BaseApplication
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
