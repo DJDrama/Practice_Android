@@ -47,8 +47,8 @@ class RecipeListFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val recipes = viewModel.recipes.value // observable ds
-
                 val query = viewModel.query.value
+                val selectedCategory = viewModel.selectedCategory.value
 
                 Column {
                     Surface(
@@ -77,7 +77,7 @@ class RecipeListFragment : Fragment() {
                                     },
                                     onImeActionPerformed = { action, softKeyboardController ->
                                         if (action == ImeAction.Search) {
-                                            viewModel.newSearch(query = query)
+                                            viewModel.newSearch()
                                             softKeyboardController?.hideSoftwareKeyboard()
                                         }
                                     },
@@ -85,21 +85,25 @@ class RecipeListFragment : Fragment() {
                                     backgroundColor = MaterialTheme.colors.surface
                                 )
                             }
-                            ScrollableRow(modifier = Modifier.fillMaxWidth()) {
+                            ScrollableRow(
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(start = 8.dp, bottom = 8.dp)
+                            ) {
                                 for (category in getAllFoodCategories()) {
                                     FoodCategoryChip(
                                         category = category.value,
-                                        onExecuteSearch = {
-                                            viewModel.onQueryChanged(it)
-                                            viewModel.newSearch(it)
-                                        }
+                                        isSelected = selectedCategory == category,
+                                        onSelectedCategoryChanged = {
+                                            viewModel.onSelectedCategoryChanged(it)
+                                        },
+                                        onExecuteSearch = viewModel::newSearch
                                     )
                                 }
                             }
                         }
                     }
                     LazyColumn {
-                        itemsIndexed(items = recipes) { index, recipe ->
+                        itemsIndexed(items = recipes) { _, recipe ->
                             RecipeCard(recipe = recipe) {
                                 Log.e("Test", "Clicked : $recipe")
                             }
