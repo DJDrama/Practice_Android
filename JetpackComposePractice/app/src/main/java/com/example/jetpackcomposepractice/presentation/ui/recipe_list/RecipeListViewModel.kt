@@ -21,7 +21,8 @@ constructor(
 ) : ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
-    val query: MutableState<String> = mutableStateOf("Chicken")
+
+    val query: MutableState<String> = mutableStateOf("")
 
     init {
         newSearch(query.value)
