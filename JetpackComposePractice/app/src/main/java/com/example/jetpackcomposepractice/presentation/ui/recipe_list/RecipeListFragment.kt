@@ -5,12 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Space
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
@@ -37,10 +43,28 @@ class RecipeListFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val recipes = viewModel.recipes.value // observable ds
-                LazyColumn {
-                    itemsIndexed(items = recipes) { index, recipe ->
-                        RecipeCard(recipe = recipe) {
-                            Log.e("Test", "Clicked : $recipe")
+
+                val query = viewModel.query.value
+                /** Using savedInstanceState **/
+//                val _query = savedInstanceState{
+//                    "beef"
+//                }
+                
+                Column{
+                    TextField(
+                        value = query,
+                        //value = _query.value,
+                        onValueChange = {
+                            viewModel.onQueryChanged(it)
+                            //_query.value = it
+                        }
+                    )
+                    Spacer(modifier = Modifier.padding(10.dp))
+                    LazyColumn {
+                        itemsIndexed(items = recipes) { index, recipe ->
+                            RecipeCard(recipe = recipe) {
+                                Log.e("Test", "Clicked : $recipe")
+                            }
                         }
                     }
                 }
