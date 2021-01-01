@@ -31,6 +31,7 @@ fun RecipeCard(
             .clickable(onClick = onClick),
         elevation = 8.dp
     ) {
+
         Column {
             recipe.featuredImage?.let { url ->
                 val image = LoadPicture(url = url, defaultImage = DEFAULT_RECIPE_IMAGE).value
