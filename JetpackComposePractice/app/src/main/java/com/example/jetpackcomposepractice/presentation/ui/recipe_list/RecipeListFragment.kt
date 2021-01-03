@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.jetpackcomposepractice.R
+import com.example.jetpackcomposepractice.presentation.components.CircularIndeterminateProgressBar
 import com.example.jetpackcomposepractice.presentation.components.FoodCategoryChip
 import com.example.jetpackcomposepractice.presentation.components.RecipeCard
 import com.example.jetpackcomposepractice.presentation.components.SearchAppBar
@@ -51,6 +52,7 @@ class RecipeListFragment : Fragment() {
                 val recipes = viewModel.recipes.value // observable ds
                 val query = viewModel.query.value
                 val selectedCategory = viewModel.selectedCategory.value
+                val loading = viewModel.loading.value
 
                 Column {
                     SearchAppBar(
@@ -62,12 +64,15 @@ class RecipeListFragment : Fragment() {
                         onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
                         onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition
                     )
-                    LazyColumn {
-                        itemsIndexed(items = recipes) { _, recipe ->
-                            RecipeCard(recipe = recipe) {
-                                Log.e("Test", "Clicked : $recipe")
+                    Box(modifier = Modifier.fillMaxSize()){ // like a frame layout
+                        LazyColumn {
+                            itemsIndexed(items = recipes) { _, recipe ->
+                                RecipeCard(recipe = recipe) {
+                                    Log.e("Test", "Clicked : $recipe")
+                                }
                             }
                         }
+                        CircularIndeterminateProgressBar(isDisplayed = loading)
                     }
                 }
 

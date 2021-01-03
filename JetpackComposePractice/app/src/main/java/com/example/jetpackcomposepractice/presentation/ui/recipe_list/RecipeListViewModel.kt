@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcomposepractice.domain.model.Recipe
 import com.example.jetpackcomposepractice.repository.RecipeRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Named
 
@@ -21,25 +22,39 @@ constructor(
 ) : ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
-
     val query: MutableState<String> = mutableStateOf("")
-
     val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null) // can be null
-
     var categoryScrollPosition: Float = 0f // track position
+
+    val loading = mutableStateOf(false)
 
     init {
         newSearch()
     }
+    private fun resetSearchState(){
+        recipes.value = listOf() //reset list
+        if(selectedCategory.value?.value != query.value)
+            clearSelectedCategory()
+
+    }
+    private fun clearSelectedCategory(){
+        selectedCategory.value = null
+    }
 
     fun newSearch() {
         viewModelScope.launch {
+            loading.value = true
+            resetSearchState() // reset the list
+            /** Just to see loading **/
+            delay(2000)
+
             val result = repository.search(
                 token = token,
                 page = 1,
                 query = query.value
             )
             recipes.value = result
+            loading.value = false
         }
     }
 
@@ -47,13 +62,13 @@ constructor(
         this.query.value = query
     }
 
-    fun onSelectedCategoryChanged(category: String){
+    fun onSelectedCategoryChanged(category: String) {
         val newCategory = getFoodCategory(category)
         selectedCategory.value = newCategory
         onQueryChanged(category)
     }
 
-    fun onChangeCategoryScrollPosition(position: Float){
+    fun onChangeCategoryScrollPosition(position: Float) {
         categoryScrollPosition = position
     }
 }
