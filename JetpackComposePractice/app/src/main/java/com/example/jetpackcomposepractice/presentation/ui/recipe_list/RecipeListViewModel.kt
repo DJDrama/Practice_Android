@@ -26,6 +26,8 @@ constructor(
 
     val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null) // can be null
 
+    var categoryScrollPosition: Float = 0f // track position
+
     init {
         newSearch()
     }
@@ -49,5 +51,9 @@ constructor(
         val newCategory = getFoodCategory(category)
         selectedCategory.value = newCategory
         onQueryChanged(category)
+    }
+
+    fun onChangeCategoryScrollPosition(position: Float){
+        categoryScrollPosition = position
     }
 }
