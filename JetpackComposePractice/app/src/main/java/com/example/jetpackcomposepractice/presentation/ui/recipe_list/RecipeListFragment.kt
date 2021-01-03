@@ -9,6 +9,7 @@ import android.widget.Space
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -56,7 +57,7 @@ class RecipeListFragment : Fragment() {
                         color = Color.White,
                         elevation = 8.dp
                     ) {
-                        Column() {
+                        Column{
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 TextField(
                                     modifier = Modifier.fillMaxWidth(0.9f) //90%
@@ -85,16 +86,22 @@ class RecipeListFragment : Fragment() {
                                     backgroundColor = MaterialTheme.colors.surface
                                 )
                             }
+                            val scrollState = rememberScrollState()
                             ScrollableRow(
                                 modifier = Modifier.fillMaxWidth()
-                                    .padding(start = 8.dp, bottom = 8.dp)
+                                    .padding(start = 8.dp, bottom = 8.dp),
+                                scrollState = scrollState
                             ) {
+                                scrollState.scrollTo(viewModel.categoryScrollPosition)
                                 for (category in getAllFoodCategories()) {
                                     FoodCategoryChip(
                                         category = category.value,
                                         isSelected = selectedCategory == category,
                                         onSelectedCategoryChanged = {
                                             viewModel.onSelectedCategoryChanged(it)
+
+                                            // scroll position
+                                            viewModel.onChangeCategoryScrollPosition(scrollState.value)
                                         },
                                         onExecuteSearch = viewModel::newSearch
                                     )
