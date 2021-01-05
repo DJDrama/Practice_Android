@@ -31,6 +31,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.jetpackcomposepractice.R
 import com.example.jetpackcomposepractice.presentation.components.*
+import com.example.jetpackcomposepractice.presentation.components.AnimatedHeartButton.HeartButtonState.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,7 +62,22 @@ class RecipeListFragment : Fragment() {
                         onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
                         onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition
                     )
-                    PulsingDemo()
+
+                    val state = remember { mutableStateOf(IDLE) }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth().height(200.dp).padding(top=48.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        AnimationHeartButton(modifier = Modifier, buttonState = state, onToggle = {
+                            state.value = if (state.value == IDLE)
+                                ACTIVE
+                            else
+                                IDLE
+                        })
+                    }
+
+                    //PulsingDemo()
 //                    Box(modifier = Modifier.fillMaxSize()){ // like a frame layout
 //                        LazyColumn {
 //                            itemsIndexed(items = recipes) { _, recipe ->
