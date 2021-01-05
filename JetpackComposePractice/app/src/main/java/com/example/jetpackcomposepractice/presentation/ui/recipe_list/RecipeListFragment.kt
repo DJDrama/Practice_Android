@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
 import androidx.compose.foundation.ScrollableRow
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -14,11 +15,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
@@ -62,32 +66,22 @@ class RecipeListFragment : Fragment() {
                         onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
                         onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition
                     )
+                    //LoadingRecipeListShimmer(imageHeight = 250.dp)
 
-                    val state = remember { mutableStateOf(IDLE) }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth().height(200.dp).padding(top=48.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        AnimationHeartButton(modifier = Modifier, buttonState = state, onToggle = {
-                            state.value = if (state.value == IDLE)
-                                ACTIVE
-                            else
-                                IDLE
-                        })
+                    Box(modifier = Modifier.fillMaxSize()) { // like a frame layout
+                        if (loading) {
+                            LoadingRecipeListShimmer(imageHeight = 250.dp)
+                        } else {
+                            LazyColumn {
+                                itemsIndexed(items = recipes) { _, recipe ->
+                                    RecipeCard(recipe = recipe) {
+                                        Log.e("Test", "Clicked : $recipe")
+                                    }
+                                }
+                            }
+                        }
+                        CircularIndeterminateProgressBar(isDisplayed = loading)
                     }
-
-                    //PulsingDemo()
-//                    Box(modifier = Modifier.fillMaxSize()){ // like a frame layout
-//                        LazyColumn {
-//                            itemsIndexed(items = recipes) { _, recipe ->
-//                                RecipeCard(recipe = recipe) {
-//                                    Log.e("Test", "Clicked : $recipe")
-//                                }
-//                            }
-//                        }
-//                        CircularIndeterminateProgressBar(isDisplayed = loading)
-//                    }
                 }
 
             }
