@@ -112,7 +112,8 @@ class RecipeListFragment : Fragment() {
                                             )
                                         }
                                     } else {
-                                        viewModel.newSearch()
+                                        viewModel.onTriggerEvent(RecipeListEvent.NewSearchEvent)
+                                        //viewModel.newSearch()
                                     }
                                 },
                                 scrollPosition = viewModel.categoryScrollPosition,
@@ -147,7 +148,8 @@ class RecipeListFragment : Fragment() {
                                     itemsIndexed(items = recipes) { index, recipe ->
                                         viewModel.onChangeRecipeScrollPosition(index)
                                         if (((index + 1) >= (page * PAGE_SIZE)) && !loading) {
-                                            viewModel.nextPage()
+                                            viewModel.onTriggerEvent(RecipeListEvent.NextPageEvent)
+                                            //viewModel.nextPage()
                                         }
                                         RecipeCard(recipe = recipe) {
                                             Log.e("Test", "Clicked : $recipe")

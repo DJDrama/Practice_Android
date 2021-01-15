@@ -34,29 +34,24 @@ constructor(
     private var recipeListScrollPosition = 0
 
     init {
-        newSearch()
+        onTriggerEvent(RecipeListEvent.NewSearchEvent)
     }
 
-    fun nextPage(){
-        viewModelScope.launch {
-            // prevent duplicate events due to recompose happening to quickly
-            if((recipeListScrollPosition+1) >= (page.value * PAGE_SIZE)){
-                loading.value = true
-                incrementPage()
-
-                // to show pagination
-                delay(1000)
-
-                if(page.value > 1){
-                    val result = repository.search(
-                        token = token,
-                        page = page.value,
-                        query = query.value
-                    )
-                    appendRecipes(result)
+    fun onTriggerEvent(event: RecipeListEvent){
+        viewModelScope.launch{
+            try{
+                when(event){
+                    is RecipeListEvent.NewSearchEvent->{
+                        newSearch()
+                    }
+                    is RecipeListEvent.NextPageEvent->{
+                        nextPage()
+                    }
                 }
-                loading.value = false
+            }catch(e: Exception){
+                Log.e("RecipeListVM", "onTriggerEvent: Exception ${e} ${e.cause}")
             }
+
         }
     }
 
@@ -86,8 +81,8 @@ constructor(
         selectedCategory.value = null
     }
 
-    fun newSearch() {
-        viewModelScope.launch {
+    //use case #1
+    private suspend fun newSearch() {
             loading.value = true
             resetSearchState() // reset the list
             /** Just to see loading **/
@@ -102,10 +97,30 @@ constructor(
             )
             recipes.value = result
             loading.value = false
-
-
-        }
     }
+
+    //use case #2
+    private suspend fun nextPage(){
+            // prevent duplicate events due to recompose happening to quickly
+            if((recipeListScrollPosition+1) >= (page.value * PAGE_SIZE)){
+                loading.value = true
+                incrementPage()
+
+                // to show pagination
+                delay(1000)
+
+                if(page.value > 1){
+                    val result = repository.search(
+                        token = token,
+                        page = page.value,
+                        query = query.value
+                    )
+                    appendRecipes(result)
+                }
+                loading.value = false
+            }
+    }
+
 
     fun onQueryChanged(query: String) {
         this.query.value = query
