@@ -14,6 +14,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Named
 
+const val PAGE_SIZE = 30
+
 class RecipeListViewModel
 @ViewModelInject
 constructor(
@@ -28,16 +30,59 @@ constructor(
 
     val loading = mutableStateOf(false)
 
+    val page = mutableStateOf(1)
+    private var recipeListScrollPosition = 0
+
     init {
         newSearch()
     }
-    private fun resetSearchState(){
+
+    fun nextPage(){
+        viewModelScope.launch {
+            // prevent duplicate events due to recompose happening to quickly
+            if((recipeListScrollPosition+1) >= (page.value * PAGE_SIZE)){
+                loading.value = true
+                incrementPage()
+
+                // to show pagination
+                delay(1000)
+
+                if(page.value > 1){
+                    val result = repository.search(
+                        token = token,
+                        page = page.value,
+                        query = query.value
+                    )
+                    appendRecipes(result)
+                }
+                loading.value = false
+            }
+        }
+    }
+
+    /** Append New recipes to the current list of recipes **/
+    private fun appendRecipes(recipes: List<Recipe>) {
+        val current = ArrayList(this.recipes.value)
+        current.addAll(recipes)
+        this.recipes.value = current
+    }
+
+    private fun incrementPage() {
+        page.value = page.value + 1
+    }
+
+    fun onChangeRecipeScrollPosition(position: Int) {
+        recipeListScrollPosition = position
+    }
+
+    private fun resetSearchState() {
         recipes.value = listOf() //reset list
-        if(selectedCategory.value?.value != query.value)
+        if (selectedCategory.value?.value != query.value)
             clearSelectedCategory()
 
     }
-    private fun clearSelectedCategory(){
+
+    private fun clearSelectedCategory() {
         selectedCategory.value = null
     }
 
@@ -48,6 +93,8 @@ constructor(
             /** Just to see loading **/
             delay(2000)
 
+
+
             val result = repository.search(
                 token = token,
                 page = 1,
@@ -55,6 +102,8 @@ constructor(
             )
             recipes.value = result
             loading.value = false
+
+
         }
     }
 
