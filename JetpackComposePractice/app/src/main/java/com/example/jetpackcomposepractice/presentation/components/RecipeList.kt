@@ -70,7 +70,7 @@ fun RecipeList(
                 }
             }
         }
-        CircularIndeterminateProgressBar(isDisplayed = loading)
+        CircularIndeterminateProgressBar(isDisplayed = loading, verticalBias = 0.3f)
         DefaultSnackbar(
             snackbarHostState = scaffoldState.snackbarHostState,
             onDismiss = {
