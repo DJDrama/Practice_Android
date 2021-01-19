@@ -25,9 +25,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.jetpackcomposepractice.presentation.BaseApplication
-import com.example.jetpackcomposepractice.presentation.components.CircularIndeterminateProgressBar
-import com.example.jetpackcomposepractice.presentation.components.DefaultSnackbar
-import com.example.jetpackcomposepractice.presentation.components.RecipeView
+import com.example.jetpackcomposepractice.presentation.components.*
 import com.example.jetpackcomposepractice.presentation.components.util.SnackbarController
 import com.example.jetpackcomposepractice.presentation.theme.AppTheme
 import com.example.jetpackcomposepractice.presentation.ui.recipe_list.RecipeListViewModel
@@ -71,7 +69,8 @@ class RecipeFragment : Fragment() {
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             if (loading && recipe == null) {
-                                Text("Loading...")
+                                //Text("Loading...")
+                                LoadingRecipeShimmer(imageHeight = IMAGE_HEIGHT.dp)
                             } else {
                                 recipe?.let {
                                     if (it.id == 1) { // Just For Testing Snackbar for recipe id 1
