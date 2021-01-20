@@ -89,14 +89,20 @@ class RecipeListFragment : Fragment() {
 //                }
 
                 /** Real **/
-                AppTheme(darkTheme = application.isDark.value) {
-                    val recipes = viewModel.recipes.value // observable ds
-                    val query = viewModel.query.value
-                    val selectedCategory = viewModel.selectedCategory.value
-                    val loading = viewModel.loading.value
-                    val page = viewModel.page.value
+                val recipes = viewModel.recipes.value // observable ds
+                val query = viewModel.query.value
+                val selectedCategory = viewModel.selectedCategory.value
+                val loading = viewModel.loading.value
+                val page = viewModel.page.value
 
-                    val scaffoldState = rememberScaffoldState()
+                val scaffoldState = rememberScaffoldState()
+
+                AppTheme(
+                    darkTheme = application.isDark.value,
+                    displayProgressBar = loading,
+                    scaffoldState = scaffoldState
+                ) {
+
 
                     Scaffold(
                         topBar = {
