@@ -11,8 +11,6 @@ import androidx.compose.ui.graphics.Color
 import com.example.jetpackcomposepractice.presentation.components.CircularIndeterminateProgressBar
 import com.example.jetpackcomposepractice.presentation.components.DefaultSnackbar
 
-/** Customize theme **/
-
 private val LightThemeColors = lightColors(
     primary = Blue600,
     primaryVariant = Blue400,
@@ -53,14 +51,14 @@ fun AppTheme(
         colors = if (darkTheme) DarkThemeColors else LightThemeColors,
         typography = QuickSandTypography,
         shapes = AppShapes
-    ) {
+    ){
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = if (!darkTheme) Grey1 else Color.Black)
-        ) {
+                .background(color = if(!darkTheme) Grey1 else Color.Black)
+        ){
             content()
-            CircularIndeterminateProgressBar(isDisplayed = displayProgressBar, verticalBias = 0.3f)
+            CircularIndeterminateProgressBar(isDisplayed = displayProgressBar, 0.3f)
             DefaultSnackbar(
                 snackbarHostState = scaffoldState.snackbarHostState,
                 onDismiss = {
@@ -71,4 +69,43 @@ fun AppTheme(
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 fun DefaultSnackbar(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit?
 ) {
     SnackbarHost(
         hostState = snackbarHostState,
@@ -46,3 +46,11 @@ fun DefaultSnackbar(
         modifier = modifier
     )
 }
+
+
+
+
+
+
+
+

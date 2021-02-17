@@ -11,60 +11,66 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
-import com.example.jetpackcomposepractice.R
 import com.example.jetpackcomposepractice.domain.model.Recipe
 import com.example.jetpackcomposepractice.util.DEFAULT_RECIPE_IMAGE
-import com.example.jetpackcomposepractice.util.LoadPicture
+import com.example.jetpackcomposepractice.util.loadPicture
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 @Composable
 fun RecipeCard(
     recipe: Recipe,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
-            .padding(bottom = 6.dp, top = 6.dp, start = 16.dp, end = 16.dp)
+            .padding(
+                bottom = 6.dp,
+                top = 6.dp,
+            )
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        elevation = 8.dp
+        elevation = 8.dp,
     ) {
 
-        Column {
-            recipe.featuredImage?.let { url ->
-                val image = LoadPicture(url = url, defaultImage = DEFAULT_RECIPE_IMAGE).value
-                image?.let{img->
-                    Image(
-                        bitmap = img.asImageBitmap(),
-                        modifier = Modifier.fillMaxWidth().preferredHeight(225.dp),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
-            recipe.title?.let { title ->
-                Row(
+        Column() {
+            val image = loadPicture(url = recipe.featuredImage, defaultImage = DEFAULT_RECIPE_IMAGE).value
+            image?.let { img ->
+                Image(
+                    bitmap = img.asImageBitmap(),
+                    contentDescription = "Recipe Featured Image",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 12.dp, bottom = 12.dp, start = 8.dp, end = 8.dp)
-                ) {
-                    Text(
-                        text = title,
-                        modifier = Modifier.fillMaxWidth(0.85f) // 85%,
-                            .wrapContentWidth(Alignment.Start),
-                        style = MaterialTheme.typography.h3 // header tag(h5 = second smallest)
-                    )
-                    Text(
-                        text = recipe.rating.toString(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.End)
-                            .align(Alignment.CenterVertically),
-                        style = MaterialTheme.typography.h5 // h6=smallest
-                    )
-                }
+                        .preferredHeight(225.dp),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, bottom = 12.dp, start = 8.dp, end = 8.dp)
+            ) {
+                Text(
+                    text = recipe.title,
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .wrapContentWidth(Alignment.Start),
+                    style = MaterialTheme.typography.h3
+                )
+                val rank = recipe.rating.toString()
+                Text(
+                    text = rank,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.End)
+                        .align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.h5
+                )
             }
         }
     }
 }
+
+

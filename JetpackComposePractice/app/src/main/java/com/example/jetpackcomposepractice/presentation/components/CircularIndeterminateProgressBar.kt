@@ -8,10 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CircularIndeterminateProgressBar(
-    isDisplayed: Boolean,
-    verticalBias: Float
-) {
+fun CircularIndeterminateProgressBar(isDisplayed: Boolean, verticalBias: Float) {
     if (isDisplayed) {
         ConstraintLayout(
             modifier = Modifier.fillMaxSize(),
@@ -21,15 +18,31 @@ fun CircularIndeterminateProgressBar(
             CircularProgressIndicator(
                 modifier = Modifier.constrainAs(progressBar)
                 {
-                    top.linkTo(topBias)
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
+                        top.linkTo(topBias)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
                 },
                 color = MaterialTheme.colors.primary
             )
         }
-
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
