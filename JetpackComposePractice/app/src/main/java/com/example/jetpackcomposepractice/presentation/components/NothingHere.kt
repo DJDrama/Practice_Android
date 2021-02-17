@@ -27,6 +27,5 @@ fun NothingHere(){
                 style = MaterialTheme.typography.h4
             )
         }
-
     }
 }
