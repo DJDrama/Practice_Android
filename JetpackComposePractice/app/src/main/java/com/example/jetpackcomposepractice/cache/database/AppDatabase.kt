@@ -8,6 +8,7 @@ import com.example.jetpackcomposepractice.cache.model.RecipeEntity
 
 @Database(entities = [RecipeEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
+
     abstract fun recipeDao(): RecipeDao
 
     companion object {
