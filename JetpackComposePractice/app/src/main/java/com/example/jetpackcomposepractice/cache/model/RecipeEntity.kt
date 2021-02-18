@@ -9,6 +9,8 @@ data class RecipeEntity(
     @PrimaryKey(autoGenerate=false)
     @ColumnInfo(name = "id")
     var id: Int,
+    @ColumnInfo(name="title")
+    var title: String,
     @ColumnInfo(name = "publisher")
     var publisher: String,
     @ColumnInfo(name="featured_image")
