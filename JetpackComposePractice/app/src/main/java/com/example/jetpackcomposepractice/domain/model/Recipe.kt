@@ -1,5 +1,7 @@
 package com.example.jetpackcomposepractice.domain.model
 
+import java.util.*
+
 data class Recipe (
     val id: Int,
     val title: String,
@@ -7,7 +9,8 @@ data class Recipe (
     val featuredImage: String,
     val rating: Int = 0,
     val sourceUrl: String,
+    val description: String,
     val ingredients: List<String> = listOf(),
-    val dateAdded: String,
-    val dateUpdated: String,
+    val dateAdded: Date,
+    val dateUpdated: Date,
 )
