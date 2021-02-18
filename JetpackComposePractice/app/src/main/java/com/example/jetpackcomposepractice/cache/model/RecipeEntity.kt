@@ -25,6 +25,6 @@ data class RecipeEntity(
     var dateAdded: Long,
     @ColumnInfo(name="date_updated")
     var dateUpdated: Long,
-    @ColumnInfo(name="date_refreshed")
-    var dateRefreshed: Long
+    @ColumnInfo(name = "date_cached")
+    var dateCached: Long,
 )

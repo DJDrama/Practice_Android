@@ -9,7 +9,6 @@ data class Recipe (
     val featuredImage: String,
     val rating: Int = 0,
     val sourceUrl: String,
-    val description: String,
     val ingredients: List<String> = listOf(),
     val dateAdded: Date,
     val dateUpdated: Date,
