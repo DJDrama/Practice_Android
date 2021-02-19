@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcomposepractice.domain.model.Recipe
+import com.example.jetpackcomposepractice.interactors.recipe_list.RestoreRecipes
 import com.example.jetpackcomposepractice.interactors.recipe_list.SearchRecipes
 import com.example.jetpackcomposepractice.repository.RecipeRepository
 import com.example.jetpackcomposepractice.util.TAG
@@ -30,7 +31,7 @@ class RecipeListViewModel
 @Inject
 constructor(
     private val searchRecipes: SearchRecipes,
-    private val repository: RecipeRepository,
+    private val restoreRecipes: RestoreRecipes,
     @Named("auth_token") private val token: String,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -94,21 +95,18 @@ constructor(
         }
     }
 
-    private suspend fun restoreState() {
-        loading.value = true
-        val results: MutableList<Recipe> = mutableListOf()
-        for (p in 1..page.value) {
-            val result = repository.search(
-                token = token,
-                page = p,
-                query = query.value
-            )
-            results.addAll(result)
-            if (p == page.value) { // done
-                recipes.value = results
-                loading.value = false
-            }
-        }
+    private fun restoreState() {
+        // Flow
+        restoreRecipes.execute(page = page.value, query = query.value)
+            .onEach { dataState ->
+                loading.value = dataState.loading
+                dataState.data?.let { list ->
+                    recipes.value = list
+                }
+                dataState.error?.let { errorMessage ->
+                    Log.e(TAG, "restoreState: error: $errorMessage")
+                }
+            }.launchIn(viewModelScope)
     }
 
     private fun newSearch() {

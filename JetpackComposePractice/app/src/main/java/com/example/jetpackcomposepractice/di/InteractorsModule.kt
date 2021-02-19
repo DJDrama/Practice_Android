@@ -2,6 +2,7 @@ package com.example.jetpackcomposepractice.di
 
 import com.example.jetpackcomposepractice.cache.RecipeDao
 import com.example.jetpackcomposepractice.cache.model.RecipeEntityMapper
+import com.example.jetpackcomposepractice.interactors.recipe_list.RestoreRecipes
 import com.example.jetpackcomposepractice.interactors.recipe_list.SearchRecipes
 import com.example.jetpackcomposepractice.network.RecipeService
 import com.example.jetpackcomposepractice.network.model.RecipeDtoMapper
@@ -26,5 +27,14 @@ object InteractorsModule {
         entityMapper: RecipeEntityMapper
     ): SearchRecipes {
         return SearchRecipes(recipeDao, recipeService, entityMapper, dtoMapper)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideRestoreRecipes(
+        recipeDao: RecipeDao,
+        entityMapper: RecipeEntityMapper
+    ): RestoreRecipes {
+        return RestoreRecipes(recipeDao, entityMapper)
     }
 }
