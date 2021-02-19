@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import com.example.jetpackcomposepractice.cache.RecipeDao
 import com.example.jetpackcomposepractice.cache.database.AppDatabase
 import com.example.jetpackcomposepractice.cache.database.AppDatabase.Companion.DATABASE_NAME
+import com.example.jetpackcomposepractice.cache.model.RecipeEntityMapper
 import com.example.jetpackcomposepractice.presentation.BaseApplication
 import dagger.Module
 import dagger.Provides
@@ -28,5 +29,11 @@ object CacheModule {
     @Provides
     fun provideRecipeDao(app: AppDatabase): RecipeDao{
         return app.recipeDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCacheRecipeMapper(): RecipeEntityMapper {
+        return RecipeEntityMapper()
     }
 }
