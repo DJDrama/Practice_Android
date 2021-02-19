@@ -7,11 +7,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcomposepractice.domain.model.Recipe
-import com.example.jetpackcomposepractice.repository.RecipeRepository
+import com.example.jetpackcomposepractice.interactors.recipe.GetRecipe
 import com.example.jetpackcomposepractice.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -23,50 +24,51 @@ const val STATE_KEY_RECIPE = "recipe.state.recipe.key"
 class RecipeViewModel
 @Inject
 constructor(
-    private val recipeRepository: RecipeRepository,
-    private @Named("auth_token") val token: String,
+    private val getRecipe: GetRecipe,
+    @Named("auth_token") private val token: String,
     private val state: SavedStateHandle,
-): ViewModel(){
+) : ViewModel() {
 
     val recipe: MutableState<Recipe?> = mutableStateOf(null)
 
     val loading = mutableStateOf(false)
 
+    val onLoad: MutableState<Boolean> = mutableStateOf(false)
+
     init {
         // restore if process dies
-        state.get<Int>(STATE_KEY_RECIPE)?.let{ recipeId ->
+        state.get<Int>(STATE_KEY_RECIPE)?.let { recipeId ->
             onTriggerEvent(RecipeEvent.GetRecipeEvent(recipeId))
         }
     }
 
-    fun onTriggerEvent(event: RecipeEvent){
+    fun onTriggerEvent(event: RecipeEvent) {
         viewModelScope.launch {
             try {
-                when(event){
+                when (event) {
                     is RecipeEvent.GetRecipeEvent -> {
-                        if(recipe.value == null){
+                        if (recipe.value == null) {
                             getRecipe(event.id)
                         }
                     }
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Log.e(TAG, "launchJob: Exception: ${e}, ${e.cause}")
                 e.printStackTrace()
             }
         }
     }
 
-    private suspend fun getRecipe(id: Int){
-        loading.value = true
-
-        // simulate a delay to show loading
-        delay(1000)
-
-        val recipe = recipeRepository.get(token=token, id=id)
-        this.recipe.value = recipe
-
-        state.set(STATE_KEY_RECIPE, recipe.id)
-
-        loading.value = false
+    private fun getRecipe(id: Int) {
+        getRecipe.execute(recipeId = id, token = token).onEach { dataState ->
+            loading.value = dataState.loading
+            dataState.data?.let{data->
+                recipe.value = data
+                state.set(STATE_KEY_RECIPE, data.id)
+            }
+            dataState.error?.let{errorMessage->
+                Log.e(TAG, "getRecipe: $errorMessage", )
+            }
+        }.launchIn(viewModelScope)
     }
 }

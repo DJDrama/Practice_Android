@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.jetpackcomposepractice.presentation.components.IMAGE_HEIGHT
 import com.example.jetpackcomposepractice.presentation.components.LoadingRecipeShimmer
 import com.example.jetpackcomposepractice.presentation.components.RecipeView
 import com.example.jetpackcomposepractice.presentation.theme.AppTheme
@@ -21,45 +22,47 @@ fun RecipeDetailScreen(
     recipeId: Int?,
     viewModel: RecipeViewModel
 ) {
-    Log.d(TAG, "RecipeDetailScreen: $viewModel")
-    Text("Recipe id: $recipeId", style = MaterialTheme.typography.h2)
+    if (recipeId == null){
+        TODO("Show Invalid Recipe")
+    }else {
+        // fire a one-off event to get the recipe from api
+        val onLoad = viewModel.onLoad.value
+        if (!onLoad) {
+            viewModel.onLoad.value = true
+            viewModel.onTriggerEvent(RecipeEvent.GetRecipeEvent(recipeId))
+        }
 
-//    val loading = viewModel.loading.value
-//    val recipe = viewModel.recipe.value
-//    val scaffoldState = rememberScaffoldState()
-//
-//    AppTheme(
-//        displayProgressBar = loading,
-//        scaffoldState = scaffoldState,
-//        darkTheme = isDarkTheme,
-//    ) {
-//        Scaffold(
-//            scaffoldState = scaffoldState,
-//            snackbarHost = {
-//                scaffoldState.snackbarHostState
-//            }
-//        ) {
-//            Box(
-//                modifier = Modifier.fillMaxSize()
-//            ) {
-//                if (loading && recipe == null) LoadingRecipeShimmer(imageHeight = IMAGE_HEIGHT.dp)
-//                else recipe?.let {
-//                    if (it.id == 1) { // force an error to demo snackbar
-//                        snackbarController.getScope().launch {
-//                            snackbarController.showSnackbar(
-//                                scaffoldState = scaffoldState,
-//                                message = "An error occurred with this recipe",
-//                                actionLabel = "Ok"
-//                            )
-//                        }
-//                    } else {
-//                        RecipeView(
-//                            recipe = it,
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//    }
+        val loading = viewModel.loading.value
 
+        val recipe = viewModel.recipe.value
+
+        val scaffoldState = rememberScaffoldState()
+
+        AppTheme(
+            displayProgressBar = loading,
+            scaffoldState = scaffoldState,
+            darkTheme = isDarkTheme,
+        ){
+            Scaffold(
+                scaffoldState = scaffoldState,
+                snackbarHost = {
+                    scaffoldState.snackbarHostState
+                }
+            ) {
+                Box (
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    if (loading && recipe == null) {
+                        LoadingRecipeShimmer(imageHeight = IMAGE_HEIGHT.dp)
+                    }
+                    else if(!loading && recipe == null && onLoad){
+                        TODO("Show Invalid Recipe")
+                    }
+                    else {
+                        recipe?.let {RecipeView(recipe = it) }
+                    }
+                }
+            }
+        }
+    }
 }
