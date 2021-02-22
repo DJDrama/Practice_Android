@@ -1,13 +1,15 @@
 package com.example.jetpackcomposepractice.presentation.theme
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.example.jetpackcomposepractice.presentation.components.CircularIndeterminateProgressBar
 import com.example.jetpackcomposepractice.presentation.components.DefaultSnackbar
 
@@ -51,12 +53,12 @@ fun AppTheme(
         colors = if (darkTheme) DarkThemeColors else LightThemeColors,
         typography = QuickSandTypography,
         shapes = AppShapes
-    ){
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = if(!darkTheme) Grey1 else Color.Black)
-        ){
+                .background(color = if (!darkTheme) Grey1 else Color.Black)
+        ) {
             content()
             CircularIndeterminateProgressBar(isDisplayed = displayProgressBar, 0.3f)
             DefaultSnackbar(
@@ -66,6 +68,45 @@ fun AppTheme(
                 },
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
+
+            val isShowing = remember {
+                mutableStateOf(true)
+            }
+            if (isShowing.value) {
+                AlertDialog(
+                    onDismissRequest = { isShowing.value = false },
+                    title = { Text("Dialog Title") },
+                    text = { Text("Desc text for this dialog!") },
+                    buttons = {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Button(
+                                modifier = Modifier.padding(8.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = MaterialTheme.colors.onError
+                                ),
+                                onClick = {
+                                    isShowing.value = false
+                                }
+                            ){
+                                Text("Cancel")
+                            }
+                            Button(
+                                modifier = Modifier.padding(8.dp),
+                                onClick = {
+                                    isShowing.value = false
+                                }
+                            ){
+                                Text("OK")
+                            }
+                        }
+                    }
+                )
+            }
         }
     }
 }
