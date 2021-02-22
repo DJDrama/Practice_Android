@@ -28,10 +28,12 @@ fun RecipeListScreen(
     val loading = viewModel.loading.value
     val page = viewModel.page.value
     val scaffoldState = rememberScaffoldState()
+    val dialogQueue = viewModel.dialogQueue
     AppTheme(
         displayProgressBar = loading,
         scaffoldState = scaffoldState,
         darkTheme = isDarkTheme,
+        dialogQueue = dialogQueue.queue.value
     ) {
         Scaffold(
             topBar = {

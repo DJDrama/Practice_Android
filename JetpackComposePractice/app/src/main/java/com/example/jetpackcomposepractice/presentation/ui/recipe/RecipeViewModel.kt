@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcomposepractice.domain.model.Recipe
 import com.example.jetpackcomposepractice.interactors.recipe.GetRecipe
+import com.example.jetpackcomposepractice.util.DialogQueue
 import com.example.jetpackcomposepractice.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,6 +35,7 @@ constructor(
     val loading = mutableStateOf(false)
 
     val onLoad: MutableState<Boolean> = mutableStateOf(false)
+    val dialogQueue = DialogQueue()
 
     init {
         // restore if process dies
@@ -68,6 +70,7 @@ constructor(
             }
             dataState.error?.let{errorMessage->
                 Log.e(TAG, "getRecipe: $errorMessage", )
+                dialogQueue.appendErrorMessage("Error", errorMessage)
             }
         }.launchIn(viewModelScope)
     }

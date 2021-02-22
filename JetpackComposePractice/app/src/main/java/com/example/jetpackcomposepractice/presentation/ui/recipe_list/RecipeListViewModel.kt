@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.jetpackcomposepractice.domain.model.Recipe
 import com.example.jetpackcomposepractice.interactors.recipe_list.RestoreRecipes
 import com.example.jetpackcomposepractice.interactors.recipe_list.SearchRecipes
+import com.example.jetpackcomposepractice.util.DialogQueue
 import com.example.jetpackcomposepractice.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -47,6 +48,8 @@ constructor(
     val page = mutableStateOf(1)
 
     var recipeListScrollPosition = 0
+
+    val dialogQueue = DialogQueue()
 
     init {
         savedStateHandle.get<Int>(STATE_KEY_PAGE)?.let { p ->
@@ -103,6 +106,7 @@ constructor(
                 }
                 dataState.error?.let { errorMessage ->
                     Log.e(TAG, "restoreState: error: $errorMessage")
+                    dialogQueue.appendErrorMessage("Error", errorMessage)
                 }
             }.launchIn(viewModelScope)
     }
@@ -120,6 +124,12 @@ constructor(
                 }
                 dataState.error?.let { errorMessage ->
                     Log.e(TAG, "newSearch: error: $errorMessage")
+                    dialogQueue.appendErrorMessage("Error", errorMessage)
+
+//                    dialogQueue.appendErrorMessage("Error1", errorMessage)
+//                    dialogQueue.appendErrorMessage("Error2", errorMessage)
+//                    dialogQueue.appendErrorMessage("Error3", errorMessage)
+
                 }
             }.launchIn(viewModelScope)
 
@@ -138,6 +148,7 @@ constructor(
                             appendRecipes(list)
                         }
                         dataState.error?.let { errorMessage ->
+                            dialogQueue.appendErrorMessage("Error", errorMessage)
                             Log.e(TAG, "nextPage: error: $errorMessage")
                         }
                     }.launchIn(viewModelScope)

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.jetpackcomposepractice.presentation.components.*
+import java.util.*
 
 private val LightThemeColors = lightColors(
     primary = Blue600,
@@ -46,6 +47,7 @@ fun AppTheme(
     darkTheme: Boolean,
     displayProgressBar: Boolean,
     scaffoldState: ScaffoldState,
+    dialogQueue: Queue<GenericDialogInfo>,
     content: @Composable () -> Unit,
 ) {
     MaterialTheme(
@@ -68,36 +70,25 @@ fun AppTheme(
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
 
-            val isShowing = remember {
-                mutableStateOf(true)
-            }
-            if (isShowing.value) {
-                val dialogInfo = GenericDialogInfo.Builder()
-                    .title("Error")
-                    .onDismiss{isShowing.value = false}
-                    .description("Error Dialog Description!")
-                    .positiveAction(
-                        PositiveAction(
-                            positiveBtnTxt = "OK",
-                            onPositiveAction = { isShowing.value = false })
-                    )
-                    .negativeAction(
-                        NegativeAction(
-                            negativeBtnTxt = "Cancel",
-                            onNegativeAction = { isShowing.value = false })
-                    )
-                GenericDialog(
-                    onDismiss = dialogInfo.onDismiss!!,
-                    title = dialogInfo.title!!,
-                    description = dialogInfo.description,
-                    positiveAction = dialogInfo.positiveAction,
-                    negativeAction = dialogInfo.negativeAction
-                )
-            }
+            ProcessDialogQueue(dialogQueue = dialogQueue)
         }
     }
 }
 
+@Composable
+fun ProcessDialogQueue(
+    dialogQueue: Queue<GenericDialogInfo>,
+) {
+    dialogQueue.peek()?.let { dialogInfo ->
+        GenericDialog(
+            onDismiss = dialogInfo.onDismiss,
+            title = dialogInfo.title,
+            description = dialogInfo.description,
+            positiveAction = dialogInfo.positiveAction,
+            negativeAction = dialogInfo.negativeAction
+        )
+    }
+}
 
 
 

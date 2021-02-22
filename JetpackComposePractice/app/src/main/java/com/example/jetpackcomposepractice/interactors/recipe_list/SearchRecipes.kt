@@ -28,6 +28,9 @@ class SearchRecipes(
             // just to show pagination (debug mode)
             delay(1000)
 
+            if(query=="error")
+                throw Exception("search Failed!")
+
             val recipes = getRecipesFromNetwork(token = token, page = page, query = query)
 
             // insert into the cache
