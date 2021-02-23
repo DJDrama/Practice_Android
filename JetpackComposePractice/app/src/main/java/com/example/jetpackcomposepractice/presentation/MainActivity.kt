@@ -55,12 +55,12 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = Screen.RecipeList.route) {
-
                 composable(route = Screen.RecipeList.route) { navBackStackEntry ->
                     val factory = HiltViewModelFactory(AmbientContext.current, navBackStackEntry)
                     val viewModel: RecipeListViewModel = viewModel("RecipeList", factory)
 
                     RecipeListScreen(
+                        isNetworkAvailable = connectivityManagerObject.isNetworkAvailable.value,
                         isDarkTheme = (application as BaseApplication).isDark.value,
                         onToggleTheme = (application as BaseApplication)::toggleLightTheme,
                         onNavigateToRecipeDetailScreen = navController::navigate,
@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                     val factory = HiltViewModelFactory(AmbientContext.current, navBackStackEntry)
                     val viewModel: RecipeViewModel = viewModel("RecipeDetail", factory)
                     RecipeDetailScreen(
+                        isNetworkAvailable = connectivityManagerObject.isNetworkAvailable.value,
                         isDarkTheme = (application as BaseApplication).isDark.value,
                         recipeId = navBackStackEntry.arguments?.getInt("recipeId"),
                         viewModel = viewModel

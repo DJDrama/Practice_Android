@@ -17,6 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun RecipeListScreen(
     isDarkTheme: Boolean,
     onToggleTheme: () -> Unit,
+    isNetworkAvailable: Boolean,
     onNavigateToRecipeDetailScreen: (String) -> Unit,
     viewModel: RecipeListViewModel
 ) {
@@ -33,6 +34,7 @@ fun RecipeListScreen(
         displayProgressBar = loading,
         scaffoldState = scaffoldState,
         darkTheme = isDarkTheme,
+        isNetworkAvailable = isNetworkAvailable,
         dialogQueue = dialogQueue.queue.value
     ) {
         Scaffold(

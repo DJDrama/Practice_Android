@@ -20,6 +20,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun RecipeDetailScreen(
     isDarkTheme: Boolean,
     recipeId: Int?,
+    isNetworkAvailable: Boolean,
     viewModel: RecipeViewModel
 ) {
     if (recipeId == null){
@@ -43,6 +44,7 @@ fun RecipeDetailScreen(
         AppTheme(
             displayProgressBar = loading,
             scaffoldState = scaffoldState,
+            isNetworkAvailable = isNetworkAvailable,
             dialogQueue = dialogQueue.queue.value,
             darkTheme = isDarkTheme,
         ){
