@@ -22,6 +22,7 @@ import com.example.jetpackcomposepractice.presentation.ui.recipe.RecipeDetailScr
 import com.example.jetpackcomposepractice.presentation.ui.recipe.RecipeViewModel
 import com.example.jetpackcomposepractice.presentation.ui.recipe_list.RecipeListScreen
 import com.example.jetpackcomposepractice.presentation.ui.recipe_list.RecipeListViewModel
+import com.example.jetpackcomposepractice.presentation.util.ConnectivityManagerObject
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -29,52 +30,23 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    val TAG = "MainActivity"
-    lateinit var cm: ConnectivityManager
 
-    private val networkRequest: NetworkRequest by lazy {
-        NetworkRequest.Builder().addCapability(NET_CAPABILITY_INTERNET).build()
-    }
-
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            super.onAvailable(network)
-            Log.d(TAG, "onAvailable: $network")
-            val networkCapabilities = cm.getNetworkCapabilities(network)
-
-            val hasInternetCapability = networkCapabilities?.hasCapability(NET_CAPABILITY_INTERNET)
-            if(hasInternetCapability == true){
-                CoroutineScope(IO).launch {
-                    val hasInternet = DoesNetworkHaveInternet.execute()
-                    if(hasInternet){
-                        withContext(Main){
-                            Log.d(TAG, "onAvailable: This network has internet $network")
-                        }
-                    }
-                }
-            }
-        }
-
-        override fun onLost(network: Network) {
-            super.onLost(network)
-            Log.d(TAG, "onLost: $network")
-        }
-    }
+    @Inject
+    lateinit var connectivityManagerObject: ConnectivityManagerObject
 
     override fun onStart() {
         super.onStart()
-        cm = this.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        cm.registerNetworkCallback(networkRequest, networkCallback)
+        connectivityManagerObject.registerConnectionObserver(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        cm.unregisterNetworkCallback(networkCallback)
+        connectivityManagerObject.unregisterConnectionObserver(this)
     }
-
 
     @ExperimentalCoroutinesApi
     @ExperimentalMaterialApi

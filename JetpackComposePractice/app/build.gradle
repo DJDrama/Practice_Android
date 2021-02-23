@@ -93,6 +93,7 @@ dependencies {
     implementation Square.retrofit_gson
     implementation Square.okHttp
     implementation Square.leak_canary
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
 
     kapt AnnotationProcessing.hilt_compiler
     kapt AnnotationProcessing.glide_compiler
