@@ -1,7 +1,12 @@
 package com.example.jetpackcomposepractice.presentation
 
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.platform.setContent
@@ -19,6 +24,36 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    val TAG = "MainActivity"
+    lateinit var cm: ConnectivityManager
+
+    val networkRequest by lazy {
+        NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
+    }
+
+    val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            Log.d(TAG, "onAvailable: $network")
+        }
+
+        override fun onLost(network: Network) {
+            super.onLost(network)
+            Log.d(TAG, "onLost: $network")
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        cm = this.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        cm.registerNetworkCallback(networkRequest, networkCallback)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cm.unregisterNetworkCallback(networkCallback)
+    }
+
 
     @ExperimentalCoroutinesApi
     @ExperimentalMaterialApi
