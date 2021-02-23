@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcomposepractice.domain.model.Recipe
 import com.example.jetpackcomposepractice.interactors.recipe.GetRecipe
+import com.example.jetpackcomposepractice.presentation.util.ConnectivityManagerObject
 import com.example.jetpackcomposepractice.util.DialogQueue
 import com.example.jetpackcomposepractice.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +27,7 @@ class RecipeViewModel
 @Inject
 constructor(
     private val getRecipe: GetRecipe,
+    private val connectivityManagerObject: ConnectivityManagerObject,
     @Named("auth_token") private val token: String,
     private val state: SavedStateHandle,
 ) : ViewModel() {
@@ -62,14 +64,18 @@ constructor(
     }
 
     private fun getRecipe(id: Int) {
-        getRecipe.execute(recipeId = id, token = token).onEach { dataState ->
+        getRecipe.execute(
+            recipeId = id,
+            token = token,
+            isNetworkAvailable = connectivityManagerObject.isNetworkAvailable.value
+        ).onEach { dataState ->
             loading.value = dataState.loading
-            dataState.data?.let{data->
+            dataState.data?.let { data ->
                 recipe.value = data
                 state.set(STATE_KEY_RECIPE, data.id)
             }
-            dataState.error?.let{errorMessage->
-                Log.e(TAG, "getRecipe: $errorMessage", )
+            dataState.error?.let { errorMessage ->
+                Log.e(TAG, "getRecipe: $errorMessage")
                 dialogQueue.appendErrorMessage("Error", errorMessage)
             }
         }.launchIn(viewModelScope)

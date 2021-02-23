@@ -19,7 +19,11 @@ class GetRecipe(
     private val recipeDtoMapper: RecipeDtoMapper,
     private val recipeEntityMapper: RecipeEntityMapper
 ) {
-    fun execute(recipeId: Int, token: String): Flow<DataState<Recipe>> = flow {
+    fun execute(
+        recipeId: Int,
+        token: String,
+        isNetworkAvailable: Boolean,
+    ): Flow<DataState<Recipe>> = flow {
         try {
             emit(DataState.loading())
             delay(1000)
@@ -28,10 +32,11 @@ class GetRecipe(
             if (recipe != null) {
                 emit(DataState.success(recipe))
             } else {
-                val networkRecipe = getRecipeFromNetwork(token = token, recipeId = recipeId)
-                recipeDao.insertRecipe(recipeEntityMapper.mapFromDomainModel(networkRecipe))
+                if(isNetworkAvailable){
+                    val networkRecipe = getRecipeFromNetwork(token = token, recipeId = recipeId)
+                    recipeDao.insertRecipe(recipeEntityMapper.mapFromDomainModel(networkRecipe))
+                }
                 recipe = getRecipeFromCache(recipeId = recipeId)
-
                 recipe?.let {
                     emit(DataState.success(it))
                 } ?: throw Exception("Unable to get the recipe!")

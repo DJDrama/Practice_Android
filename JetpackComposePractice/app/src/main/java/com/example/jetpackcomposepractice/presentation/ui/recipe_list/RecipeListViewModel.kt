@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.jetpackcomposepractice.domain.model.Recipe
 import com.example.jetpackcomposepractice.interactors.recipe_list.RestoreRecipes
 import com.example.jetpackcomposepractice.interactors.recipe_list.SearchRecipes
+import com.example.jetpackcomposepractice.presentation.util.ConnectivityManagerObject
 import com.example.jetpackcomposepractice.util.DialogQueue
 import com.example.jetpackcomposepractice.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,7 @@ class RecipeListViewModel
 constructor(
     private val searchRecipes: SearchRecipes,
     private val restoreRecipes: RestoreRecipes,
+    private val connectivityManagerObject: ConnectivityManagerObject,
     @Named("auth_token") private val token: String,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -116,7 +118,12 @@ constructor(
 
         resetSearchState()
         // Flow
-        searchRecipes.execute(token = token, page = page.value, query = query.value)
+        searchRecipes.execute(
+            token = token,
+            page = page.value,
+            query = query.value,
+            isNetworkAvailable = connectivityManagerObject.isNetworkAvailable.value
+        )
             .onEach { dataState ->
                 loading.value = dataState.loading
                 dataState.data?.let { list ->
@@ -141,7 +148,12 @@ constructor(
             incrementPage()
 
             if (page.value > 1) {
-                searchRecipes.execute(token = token, page = page.value, query = query.value)
+                searchRecipes.execute(
+                    token = token,
+                    page = page.value,
+                    query = query.value,
+                    isNetworkAvailable = connectivityManagerObject.isNetworkAvailable.value
+                )
                     .onEach { dataState ->
                         loading.value = dataState.loading
                         dataState.data?.let { list ->
