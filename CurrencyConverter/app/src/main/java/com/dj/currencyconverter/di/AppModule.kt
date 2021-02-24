@@ -4,6 +4,8 @@ import com.dj.currencyconverter.data.CurrencyApi
 import com.dj.currencyconverter.repository.MainRepository
 import com.dj.currencyconverter.repository.MainRepositoryImpl
 import com.dj.currencyconverter.util.DispatcherProvider
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,11 +24,19 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideCurrencyApi(): CurrencyApi =
+    fun provideMoshiBuilder(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCurrencyApi(moshi: Moshi): CurrencyApi =
         Retrofit
             .Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(CurrencyApi::class.java)
 
