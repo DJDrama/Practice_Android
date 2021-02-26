@@ -24,7 +24,7 @@ class SearchRecipes(
         isNetworkAvailable: Boolean,
     ): Flow<DataState<List<Recipe>>> = flow {
         try {
-            emit(DataState.loading<List<Recipe>>()) // true
+            emit(DataState.loading()) // true
 
             // just to show pagination (debug mode)
             delay(1000)
@@ -34,6 +34,7 @@ class SearchRecipes(
 
             if(isNetworkAvailable){
                 val recipes = getRecipesFromNetwork(token = token, page = page, query = query)
+
                 // insert into the cache
                 recipeDao.insertRecipes(entityMapper.toEntityList(recipes))
             }
