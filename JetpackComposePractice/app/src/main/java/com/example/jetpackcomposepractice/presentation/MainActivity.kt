@@ -16,6 +16,7 @@ import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.test.core.app.ActivityScenario.launch
+import com.example.jetpackcomposepractice.datastore.SettingsDataStore
 import com.example.jetpackcomposepractice.interactors.app.DoesNetworkHaveInternet
 import com.example.jetpackcomposepractice.presentation.navigation.Screen
 import com.example.jetpackcomposepractice.presentation.ui.recipe.RecipeDetailScreen
@@ -34,6 +35,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var settingsDataStore: SettingsDataStore
 
     @Inject
     lateinit var connectivityManagerObject: ConnectivityManagerObject
@@ -61,8 +65,8 @@ class MainActivity : AppCompatActivity() {
 
                     RecipeListScreen(
                         isNetworkAvailable = connectivityManagerObject.isNetworkAvailable.value,
-                        isDarkTheme = (application as BaseApplication).isDark.value,
-                        onToggleTheme = (application as BaseApplication)::toggleLightTheme,
+                        isDarkTheme = settingsDataStore.isDark.value,
+                        onToggleTheme = settingsDataStore::toggleTheme,
                         onNavigateToRecipeDetailScreen = navController::navigate,
                         viewModel = viewModel
                     )
@@ -80,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     val viewModel: RecipeViewModel = viewModel("RecipeDetail", factory)
                     RecipeDetailScreen(
                         isNetworkAvailable = connectivityManagerObject.isNetworkAvailable.value,
-                        isDarkTheme = (application as BaseApplication).isDark.value,
+                        isDarkTheme = settingsDataStore.isDark.value,
                         recipeId = navBackStackEntry.arguments?.getInt("recipeId"),
                         viewModel = viewModel
                     )
