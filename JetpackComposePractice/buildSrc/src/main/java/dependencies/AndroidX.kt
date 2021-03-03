@@ -31,4 +31,7 @@ object AndroidX {
 
     const val hilt_lifecycle_viewmodel =
         "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hilt_lifecycle_viewmodel}"
+
+    const val compose_constraint = "androidx.constraintlayout:constraintlayout-compose:${Versions.compose_constraint}"
+    const val activity_compose = "androidx.activity:activity-compose:${Versions.compose_activity}"
 }
