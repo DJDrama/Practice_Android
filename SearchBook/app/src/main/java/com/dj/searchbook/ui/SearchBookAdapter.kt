@@ -42,7 +42,7 @@ class SearchBookAdapter(private val onItemClicked: (Document) -> Unit) :
             binding.apply {
                 tvName.text = document.title
                 tvDesc.text = document.contents
-                tvDate.text = DateUtils.dateToString(document.dateTime)
+                tvDate.text = document.dateTime?.let{DateUtils.dateToString(it)} ?: "알 수 없음"
                 if (document.salePrice == -1) {
                     tvSalePrice.text = "${document.price}원"
                     tvPrice.visibility = View.INVISIBLE

@@ -10,17 +10,17 @@ import com.dj.searchbook.data.model.Document
 import com.dj.searchbook.repository.BookRepository
 import com.dj.searchbook.util.CANNOT_LOAD_MORE
 import com.dj.searchbook.util.NO_DATA
+import com.dj.searchbook.util.PAGINATION_SIZE
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BookViewModel
+class SearchBookViewModel
 @Inject
 constructor(
     private val repository: BookRepository,
@@ -29,10 +29,6 @@ constructor(
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Empty)
     val uiState: StateFlow<SearchUiState>
         get() = _uiState
-
-    private val _detailDocument = MutableLiveData<Document?>()
-    val detailDocument: LiveData<Document?>
-        get() = _detailDocument
 
     private val _documents: MutableStateFlow<List<Document>> = MutableStateFlow(ArrayList())
     private val _query = MutableStateFlow("가나다")
@@ -51,10 +47,10 @@ constructor(
     }
 
     fun fetchBooks(query: String) {
-        if(query.isEmpty())
+        if (query.isEmpty())
             return
         viewModelScope.launch {
-            if(_uiState.value == SearchUiState.Loading) {
+            if (_uiState.value == SearchUiState.Loading) {
                 return@launch
             }
             resetValues(query = query)
@@ -62,9 +58,9 @@ constructor(
             repository.searchBooks(query = query, page = _page).collect { dataState ->
                 when (dataState) {
                     is DataState.Success -> {
-                        if(dataState.data!!.isEmpty()){
+                        if (dataState.data!!.isEmpty()) {
                             _uiState.value = SearchUiState.Error(errorMessage = NO_DATA)
-                        }else {
+                        } else {
                             _documents.value = dataState.data
                             _uiState.value = SearchUiState.Success(documents = _documents.value)
                         }
@@ -72,7 +68,7 @@ constructor(
                     is DataState.Error -> {
                         if (dataState.errorMessage == CANNOT_LOAD_MORE) {
                             _canLoadMore = false
-                        }else {
+                        } else {
                             _uiState.value = SearchUiState.Error(
                                 errorMessage = dataState.errorMessage
                                     ?: "Unknown Error"
@@ -91,11 +87,11 @@ constructor(
     fun nextPage(query: String) {
         viewModelScope.launch {
             if (_canLoadMore) {
-                if(_uiState.value == SearchUiState.Loading) {
+                if (_uiState.value == SearchUiState.Loading) {
                     return@launch
                 }
-                _uiState.value = SearchUiState.Loading
                 _page += 1
+                _uiState.value = SearchUiState.Loading
                 repository.searchBooks(query = query, page = _page)
                     .collect { dataState ->
                         when (dataState) {
@@ -109,7 +105,7 @@ constructor(
                             is DataState.Error -> {
                                 if (dataState.errorMessage == CANNOT_LOAD_MORE) {
                                     _canLoadMore = false
-                                }else {
+                                } else {
                                     _uiState.value = SearchUiState.Error(
                                         errorMessage = dataState.errorMessage
                                             ?: "Unknown Error"
@@ -126,14 +122,7 @@ constructor(
         _uiState.value = SearchUiState.Search(query = query)
     }
 
-    fun setFavorite(document: Document) {
-        document.isFavorite = !document.isFavorite
-        setDetailDocument(document)
-    }
 
-    fun setDetailDocument(document: Document) {
-        _detailDocument.value = document
-    }
 
     sealed class SearchUiState {
         class Success(val documents: List<Document>) : SearchUiState()

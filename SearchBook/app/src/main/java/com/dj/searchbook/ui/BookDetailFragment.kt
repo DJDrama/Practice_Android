@@ -5,10 +5,11 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.navGraphViewModels
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.dj.searchbook.R
 import com.dj.searchbook.databinding.FragmentBookDetailBinding
@@ -18,7 +19,6 @@ import androidx.palette.graphics.Palette
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.dj.searchbook.util.DateUtils
-import java.util.*
 
 @AndroidEntryPoint
 class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
@@ -26,12 +26,13 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
     private val binding
         get() = _binding!!
 
-    private val viewModel: BookViewModel by activityViewModels()
+    private val viewModel: BookDetailViewModel by viewModels()
     private val args: BookDetailFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentBookDetailBinding.bind(view)
+        setHasOptionsMenu(true)
 
         args.document?.let {
             viewModel.setDetailDocument(it)
@@ -46,13 +47,13 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     Glide.with(requireContext()).asBitmap()
                         .load(document.thumbNail)
                         .placeholder(R.drawable.no_image)
-                        .into(object: CustomTarget<Bitmap>(){
+                        .into(object : CustomTarget<Bitmap>() {
                             override fun onResourceReady(
                                 resource: Bitmap,
                                 transition: Transition<in Bitmap>?,
                             ) {
                                 ivThumbnail.setImageBitmap(resource)
-                                Palette.from(resource).generate{palette->
+                                Palette.from(resource).generate { palette ->
                                     val color = palette?.lightMutedSwatch?.rgb ?: 0
                                     frameLayout.setBackgroundColor(color)
                                 }
@@ -70,19 +71,39 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     tvAuthors.text = document.authors.joinToString()
                     tvPublisher.text = document.publisher
                     tvDesc.text = document.contents
-                    tvDate.text = "출판일: ${DateUtils.dateToString(document.dateTime)}"
+                    tvDate.text =
+                        "출시일: ${
+                            document.dateTime?.let { date ->
+                                DateUtils.dateToString(date)
+                            } ?: "알 수 없음"
+                        }"
 
-
-                    ivFavorite.setImageResource(
-                        if (document.isFavorite) R.drawable.ic_baseline_favorite_24
-                        else R.drawable.ic_baseline_favorite_border_24
-                    )
-                    ivFavorite.setOnClickListener {
-                        viewModel.setFavorite(document)
-                    }
+                    requireActivity().invalidateOptionsMenu()
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.favorite_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        if (viewModel.getIsFavorite())
+            menu.findItem(R.id.action_favorite).setIcon(R.drawable.ic_baseline_favorite_24)
+        else
+            menu.findItem(R.id.action_favorite).setIcon(R.drawable.ic_baseline_favorite_border_24)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_favorite -> {
+                viewModel.setFavorite()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {

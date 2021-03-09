@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.EditorInfo.IME_ACTION_UNSPECIFIED
-import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -19,7 +18,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dj.searchbook.R
@@ -28,9 +26,10 @@ import com.dj.searchbook.databinding.FragmentSearchBookBinding
 import com.dj.searchbook.util.NO_DATA
 import com.dj.searchbook.util.hideKeyboard
 import com.dj.searchbook.util.showSnackBar
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
@@ -38,7 +37,7 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
     private val binding
         get() = _binding!!
 
-    private val viewModel: BookViewModel by activityViewModels()
+    private val viewModel: SearchBookViewModel by viewModels()
     private lateinit var searchBookAdapter: SearchBookAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,6 +52,7 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
         searchBookAdapter = SearchBookAdapter(onItemClicked = this::onItemClicked)
         binding.recyclerView.apply {
             adapter = searchBookAdapter
+            itemAnimator = null
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
@@ -72,14 +72,14 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
     }
 
     private fun subscribeObservers() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect { uiState ->
                 when (uiState) {
-                    is BookViewModel.SearchUiState.Success -> {
+                    is SearchBookViewModel.SearchUiState.Success -> {
                         binding.progressBar.isVisible = false
                         searchBookAdapter.submitList(uiState.documents)
                     }
-                    is BookViewModel.SearchUiState.Error -> {
+                    is SearchBookViewModel.SearchUiState.Error -> {
                         binding.progressBar.isVisible = false
                         when(uiState.errorMessage){
                             NO_DATA->{
@@ -87,12 +87,12 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
                             }
                         }
                     }
-                    is BookViewModel.SearchUiState.Loading -> {
+                    is SearchBookViewModel.SearchUiState.Loading -> {
                         binding.progressBar.isVisible = true
                     }
-                    is BookViewModel.SearchUiState.Search -> {
+                    is SearchBookViewModel.SearchUiState.Search -> {
+                        searchBookAdapter.submitList(null)
                         requireContext().hideKeyboard(binding.root)
-                        binding.recyclerView.scrollToPosition(0)
                         viewModel.fetchBooks(query = uiState.query)
                     }
                 }
@@ -118,7 +118,7 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
                 it.isIconified = true
                 it.isSubmitButtonEnabled = true
                 val searchEdt = it.findViewById(R.id.search_src_text) as EditText
-                searchEdt.setOnEditorActionListener { v, actionId, event ->
+                searchEdt.setOnEditorActionListener { v, actionId, _ ->
                     if (actionId == IME_ACTION_UNSPECIFIED || actionId == IME_ACTION_SEARCH) {
                         val query = v.text.toString()
                         viewModel.setQuery(query = query)
@@ -134,14 +134,7 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_filter -> {
 
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

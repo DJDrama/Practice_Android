@@ -3,10 +3,9 @@ package com.dj.searchbook.data.model
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
-import kotlinx.parcelize.Parcelize
+import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
 @Parcelize
@@ -23,7 +22,7 @@ data class Document(
     val isbn: String,
     @ColumnInfo(name = "datetime")
     @Json(name = "datetime")
-    val dateTime: Date,
+    val dateTime: Date?,
     @ColumnInfo(name = "authors")
     val authors: List<String>,
     @ColumnInfo(name = "publisher")

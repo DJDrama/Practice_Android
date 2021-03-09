@@ -2,6 +2,7 @@ package com.dj.searchbook.di
 
 import com.dj.searchbook.api.ApiService
 import com.dj.searchbook.util.BASE_URL
+import com.dj.searchbook.util.CustomDateJsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -22,8 +23,9 @@ object RetrofitModule {
     @Provides
     fun provideMoshiBuilder(): Moshi {
         return Moshi.Builder()
-            .add(Date::class.java,  Rfc3339DateJsonAdapter().nullSafe())
-            .add(KotlinJsonAdapterFactory()).build()
+            .add(KotlinJsonAdapterFactory())
+            .add(CustomDateJsonAdapter())
+            .build()
     }
 
     @Singleton
