@@ -5,12 +5,14 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import com.example.jetpackcomposepractice.presentation.components.RecipeList
 import com.example.jetpackcomposepractice.presentation.components.SearchAppBar
 import com.example.jetpackcomposepractice.presentation.theme.AppTheme
 import com.example.jetpackcomposepractice.util.TAG
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalComposeUiApi
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @Composable

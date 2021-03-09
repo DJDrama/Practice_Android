@@ -8,11 +8,12 @@ import android.net.NetworkRequest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.platform.setContent
-import androidx.compose.ui.viewinterop.viewModel
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.HiltViewModelFactory
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.test.core.app.ActivityScenario.launch
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         connectivityManagerObject.unregisterConnectionObserver(this)
     }
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = Screen.RecipeList.route) {
                 composable(route = Screen.RecipeList.route) { navBackStackEntry ->
-                    val factory = HiltViewModelFactory(AmbientContext.current, navBackStackEntry)
+                    val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
                     val viewModel: RecipeListViewModel = viewModel("RecipeList", factory)
 
                     RecipeListScreen(
@@ -80,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     )
                 ) { navBackStackEntry ->
-                    val factory = HiltViewModelFactory(AmbientContext.current, navBackStackEntry)
+                    val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
                     val viewModel: RecipeViewModel = viewModel("RecipeDetail", factory)
                     RecipeDetailScreen(
                         isNetworkAvailable = connectivityManagerObject.isNetworkAvailable.value,

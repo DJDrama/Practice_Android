@@ -19,13 +19,6 @@ fun DefaultSnackbar(
         snackbar = { data ->
             Snackbar(
                 modifier = Modifier.padding(16.dp),
-                text = {
-                    Text(
-                        text = data.message,
-                        style = MaterialTheme.typography.body2,
-                        color = Color.White
-                    )
-                },
                 action = {
                     data.actionLabel?.let { actionLabel ->
                         TextButton(
@@ -41,7 +34,13 @@ fun DefaultSnackbar(
                         }
                     }
                 }
-            )
+            ){
+                Text(
+                    text = data.message,
+                    style = MaterialTheme.typography.body2,
+                    color = Color.White
+                )
+            }
         },
         modifier = modifier
     )
