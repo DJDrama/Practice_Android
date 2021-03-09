@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SearchBook</string>
+    <string name="label_search_book">Search Books</string>
+    <string name="label_book_detail">Book Detail</string>
+    <string name="text_filter">Filter</string>
+    <string name="text_search">Search</string>
+    <string name="cd_thumbnail_image">Thumbnail Image</string>
+    <string name="cd_favorite">Favorite</string>
+    <string name="no_data">No Data!</string>
+</resources>
