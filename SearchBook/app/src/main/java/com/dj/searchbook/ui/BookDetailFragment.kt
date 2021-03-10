@@ -21,6 +21,7 @@ import androidx.palette.graphics.Palette
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.dj.searchbook.util.DateUtils
+import com.dj.searchbook.util.getNumberFormattedString
 
 @AndroidEntryPoint
 class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
@@ -70,27 +71,28 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                             }
                         })
                     tvTitle.text = document.title
-                    tvAuthors.text = "저자: ${document.authors.joinToString()}"
-                    tvPublisher.text = "출판사: ${document.publisher}"
+                    tvAuthors.text = getString(R.string.author, document.authors.joinToString())
+                    tvPublisher.text = getString(R.string.publisher, document.publisher)
                     tvDesc.text = document.contents
-                    tvDate.text =
-                        "출시일: ${
-                            document.dateTime?.let { date ->
-                                DateUtils.dateToString(date)
-                            } ?: "알 수 없음"
-                        }"
-                    tvTranslators.text =
-                        if (document.translators.isEmpty()) "없음" else document.translators.joinToString()
-                    tvIsbn.text = "ISBN: ${document.isbn}"
-                    tvPrice.text = "${document.price}원"
+                    tvDate.text = getString(R.string.release,
+                        document.dateTime?.let { date ->
+                            DateUtils.dateToString(date)
+                        } ?: "N/A")
+                    tvTranslators.text = getString(R.string.translators,
+                        if (document.translators.isEmpty()) "None"
+                        else document.translators.joinToString())
+
+                    tvIsbn.text = getString(R.string.isbn, document.isbn)
+                    tvPrice.text =
+                        getString(R.string.price, getNumberFormattedString(document.price))
                     if (document.salePrice == -1) {
                         tvSalePrice.isVisible = false
                     } else {
-                        tvSalePrice.text = "${document.salePrice}원"
+                        tvSalePrice.text =
+                            getString(R.string.price, getNumberFormattedString(document.salePrice))
                         tvPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                     }
-                    tvUrl.text = "링크: ${document.url}"
-
+                    tvUrl.text = getString(R.string.link, document.url)
 
                     requireActivity().invalidateOptionsMenu()
                 }

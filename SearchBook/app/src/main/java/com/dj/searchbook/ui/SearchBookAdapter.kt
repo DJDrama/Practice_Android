@@ -13,6 +13,7 @@ import com.dj.searchbook.R
 import com.dj.searchbook.data.model.Document
 import com.dj.searchbook.databinding.ItemLayoutDocumentBinding
 import com.dj.searchbook.util.DateUtils
+import com.dj.searchbook.util.getNumberFormattedString
 
 class SearchBookAdapter(private val onItemClicked: (Document) -> Unit) :
     ListAdapter<Document, SearchBookAdapter.ViewHolder>(DiffCallback) {
@@ -42,14 +43,14 @@ class SearchBookAdapter(private val onItemClicked: (Document) -> Unit) :
             binding.apply {
                 tvName.text = document.title
                 tvDesc.text = document.contents
-                tvDate.text = document.dateTime?.let{DateUtils.dateToString(it)} ?: "알 수 없음"
+                tvDate.text = document.dateTime?.let{DateUtils.dateToString(it)} ?: "N/A"
                 if (document.salePrice == -1) {
-                    tvSalePrice.text = "${document.price}원"
+                    tvSalePrice.text = root.context.getString(R.string.price, getNumberFormattedString(document.price))
                     tvPrice.visibility = View.INVISIBLE
                 } else {
                     tvPrice.isVisible = true
-                    tvSalePrice.text = "${document.salePrice}원"
-                    tvPrice.text = "${document.price}원"
+                    tvSalePrice.text = root.context.getString(R.string.price, getNumberFormattedString(document.salePrice))
+                    tvPrice.text = root.context.getString(R.string.price, getNumberFormattedString(document.price))
                     tvPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 }
 

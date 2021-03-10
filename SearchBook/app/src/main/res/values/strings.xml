@@ -7,4 +7,11 @@
     <string name="cd_thumbnail_image">Thumbnail Image</string>
     <string name="cd_favorite">Favorite</string>
     <string name="no_data">No Data!</string>
+    <string name="price">₩%s</string>
+    <string name="author">Author: %s</string>
+    <string name="publisher">Publisher: %s</string>
+    <string name="release">Released: %s</string>
+    <string name="isbn">ISBN: %s</string>
+    <string name="translators">Translators: %s</string>
+    <string name="link">Link: %s</string>
 </resources>

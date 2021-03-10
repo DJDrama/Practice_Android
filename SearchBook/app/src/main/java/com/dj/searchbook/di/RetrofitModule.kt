@@ -2,7 +2,7 @@ package com.dj.searchbook.di
 
 import com.dj.searchbook.api.ApiService
 import com.dj.searchbook.util.BASE_URL
-import com.dj.searchbook.api.CustomDateJsonAdapter
+import com.dj.searchbook.util.CustomDateJsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

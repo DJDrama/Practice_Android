@@ -7,6 +7,7 @@ import com.dj.searchbook.data.DataState
 import com.dj.searchbook.data.model.Document
 import com.dj.searchbook.db.DocumentDao
 import com.dj.searchbook.util.CANNOT_LOAD_MORE
+import com.dj.searchbook.util.PAGINATION_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -34,13 +35,16 @@ constructor(
                 if (responseBody.meta.isEnd) {
                     emit(DataState.Error<List<Document>>(errorMessage = CANNOT_LOAD_MORE))
                 }
+                val cacheResult = documentDao.searchDocuments(query = query, page = page)
+                emit(DataState.Success(data = cacheResult))
+            }else{
+                emit(DataState.Error<List<Document>>(errorMessage = response.errorBody().toString()))
             }
-            // fetch from cache
-            val cacheResult = documentDao.searchDocuments(query = query, page = page)
-            emit(DataState.Success(data = cacheResult))
         } catch (e: Exception) {
             if (e.message?.contains("Unable to resolve host \"dapi.kakao.com\"") == true) {
                 val cacheResult = documentDao.searchDocuments(query = query, page = page)
+                if(cacheResult.size < PAGINATION_SIZE)
+                    emit(DataState.Error<List<Document>>(errorMessage = CANNOT_LOAD_MORE))
                 emit(DataState.Success(data = cacheResult))
             }else {
                 emit(DataState.Error<List<Document>>(errorMessage = e.message ?: "Unkown Error!"))
