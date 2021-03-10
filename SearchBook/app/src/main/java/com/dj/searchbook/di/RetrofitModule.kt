@@ -2,9 +2,8 @@ package com.dj.searchbook.di
 
 import com.dj.searchbook.api.ApiService
 import com.dj.searchbook.util.BASE_URL
-import com.dj.searchbook.util.CustomDateJsonAdapter
+import com.dj.searchbook.api.CustomDateJsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -12,7 +11,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.Date
 import javax.inject.Singleton
 
 @Module

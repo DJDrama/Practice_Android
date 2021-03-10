@@ -1,12 +1,14 @@
 package com.dj.searchbook.ui
 
 import android.graphics.Bitmap
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -68,8 +70,8 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                             }
                         })
                     tvTitle.text = document.title
-                    tvAuthors.text = document.authors.joinToString()
-                    tvPublisher.text = document.publisher
+                    tvAuthors.text = "저자: ${document.authors.joinToString()}"
+                    tvPublisher.text = "출판사: ${document.publisher}"
                     tvDesc.text = document.contents
                     tvDate.text =
                         "출시일: ${
@@ -77,6 +79,18 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                                 DateUtils.dateToString(date)
                             } ?: "알 수 없음"
                         }"
+                    tvTranslators.text =
+                        if (document.translators.isEmpty()) "없음" else document.translators.joinToString()
+                    tvIsbn.text = "ISBN: ${document.isbn}"
+                    tvPrice.text = "${document.price}원"
+                    if (document.salePrice == -1) {
+                        tvSalePrice.isVisible = false
+                    } else {
+                        tvSalePrice.text = "${document.salePrice}원"
+                        tvPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                    }
+                    tvUrl.text = "링크: ${document.url}"
+
 
                     requireActivity().invalidateOptionsMenu()
                 }

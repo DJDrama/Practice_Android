@@ -1,6 +1,6 @@
-package com.dj.searchbook.util
+package com.dj.searchbook.api
 
-import android.util.Log
+import com.dj.searchbook.util.EMPTY_DATE_STRING
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
 import java.text.SimpleDateFormat
