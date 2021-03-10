@@ -14,7 +14,7 @@ class CustomDateJsonAdapter {
 
     @FromJson
     fun fromJson(value: String): Date? {
-        if(value.isEmpty()) {
+        if (value.isEmpty()) {
             return FORMATTER.parse(EMPTY_DATE_STRING)
         }
         return FORMATTER.parse(value)

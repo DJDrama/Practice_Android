@@ -5,14 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dj.searchbook.data.model.Document
 
-
-class BookDetailViewModel: ViewModel(){
+class BookDetailViewModel : ViewModel() {
     private val _detailDocument = MutableLiveData<Document?>()
     val detailDocument: LiveData<Document?>
         get() = _detailDocument
 
     fun setFavorite() {
-        detailDocument.value?.let{
+        detailDocument.value?.let {
             it.isFavorite = !it.isFavorite
             setDetailDocument(it)
         }
@@ -23,5 +22,4 @@ class BookDetailViewModel: ViewModel(){
     }
 
     fun getIsFavorite() = detailDocument.value?.isFavorite ?: false
-
 }

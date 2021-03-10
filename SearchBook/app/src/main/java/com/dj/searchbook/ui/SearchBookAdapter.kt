@@ -43,7 +43,7 @@ class SearchBookAdapter(private val onItemClicked: (Document) -> Unit) :
             binding.apply {
                 tvName.text = document.title
                 tvDesc.text = document.contents
-                tvDate.text = document.dateTime?.let{DateUtils.dateToString(it)} ?: "N/A"
+                tvDate.text = document.dateTime?.let { DateUtils.dateToString(it) } ?: "N/A"
                 if (document.salePrice == -1) {
                     tvSalePrice.text = root.context.getString(R.string.price, getNumberFormattedString(document.price))
                     tvPrice.visibility = View.INVISIBLE
@@ -68,9 +68,14 @@ class SearchBookAdapter(private val onItemClicked: (Document) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemLayoutDocumentBinding.inflate(LayoutInflater.from(parent.context),
-            parent,
-            false), onItemClicked)
+        return ViewHolder(
+            ItemLayoutDocumentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ),
+            onItemClicked
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

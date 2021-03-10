@@ -6,5 +6,5 @@ sealed class DataState<out T>(
 ) {
     class Success<T>(data: T) : DataState<T>(data = data, errorMessage = null)
 
-    class Error<T>(errorMessage: String) : DataState<T>(data=null, errorMessage = errorMessage)
+    class Error<T>(errorMessage: String) : DataState<T>(data = null, errorMessage = errorMessage)
 }

@@ -34,7 +34,6 @@ object RetrofitModule {
             .baseUrl(BASE_URL)
     }
 
-
     @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit.Builder): ApiService {

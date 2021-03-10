@@ -3,10 +3,8 @@ package com.dj.searchbook.ui
 import android.app.SearchManager
 import android.content.Context.SEARCH_SERVICE
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.EditorInfo.IME_ACTION_UNSPECIFIED
@@ -14,7 +12,6 @@ import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,11 +20,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dj.searchbook.R
 import com.dj.searchbook.data.model.Document
 import com.dj.searchbook.databinding.FragmentSearchBookBinding
+import com.dj.searchbook.util.CHECK_INTERNET_CONNECTION
 import com.dj.searchbook.util.NO_DATA
 import com.dj.searchbook.util.hideKeyboard
 import com.dj.searchbook.util.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -82,7 +79,7 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
                         searchBookAdapter.submitList(uiState.documents)
                     }
 
-                    is SearchBookViewModel.SearchUiState.Restore->{
+                    is SearchBookViewModel.SearchUiState.Restore -> {
                         binding.progressBar.isVisible = false
                         searchBookAdapter.submitList(uiState.documents)
                         binding.recyclerView.layoutManager?.onRestoreInstanceState(uiState.state)
@@ -90,9 +87,12 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
 
                     is SearchBookViewModel.SearchUiState.Error -> {
                         binding.progressBar.isVisible = false
-                        when(uiState.errorMessage){
-                            NO_DATA->{
+                        when (uiState.errorMessage) {
+                            NO_DATA -> {
                                 binding.root.showSnackBar(NO_DATA)
+                            }
+                            CHECK_INTERNET_CONNECTION -> {
+                                binding.root.showSnackBar(CHECK_INTERNET_CONNECTION)
                             }
                         }
                     }
@@ -102,15 +102,20 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
                     }
 
                     is SearchBookViewModel.SearchUiState.Search -> {
-                        searchBookAdapter.submitList(null)
-                        requireContext().hideKeyboard(binding.root)
-                        viewModel.fetchBooks(query = uiState.query)
+                        if (uiState.query.isEmpty()) {
+                            binding.root.showSnackBar("검색어를 입력해주세요.")
+                        } else if (uiState.query.first().isWhitespace() || uiState.query.last().isWhitespace()) {
+                            binding.root.showSnackBar("검색어의 맨 앞과 맨 뒤의 빈칸을 제거해주세요.")
+                        } else {
+                            searchBookAdapter.submitList(null)
+                            requireContext().hideKeyboard(binding.root)
+                            viewModel.fetchBooks(query = uiState.query)
+                        }
                     }
                 }
             }
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -144,8 +149,6 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
             }
         }
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

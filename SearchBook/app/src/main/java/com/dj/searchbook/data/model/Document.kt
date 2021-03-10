@@ -39,5 +39,5 @@ data class Document(
     val thumbNail: String,
     @ColumnInfo(name = "status")
     val status: String,
-    var isFavorite: Boolean=false
+    var isFavorite: Boolean = false
 ) : Parcelable

@@ -12,7 +12,7 @@ interface DocumentDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertDocuments(documents: List<Document>): LongArray
 
-    //         ORDER BY datetime DESC
+    // Removed ORDER BY datetime DESC
     @Query(
         """SELECT * FROM documents 
         WHERE title LIKE '%' || :query || '%'
@@ -24,7 +24,7 @@ interface DocumentDao {
         pageSize: Int = PAGINATION_SIZE,
     ): List<Document>
 
-    //   ORDER BY datetime DESC
+    // Removed ORDER BY datetime DESC
     @Query(
         """SELECT * FROM documents
         WHERE title LIKE '%' || :query || '%' 

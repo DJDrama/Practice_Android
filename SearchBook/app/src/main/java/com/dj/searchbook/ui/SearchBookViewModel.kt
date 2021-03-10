@@ -1,9 +1,6 @@
 package com.dj.searchbook.ui
 
 import android.os.Parcelable
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,10 +8,8 @@ import com.dj.searchbook.data.DataState
 import com.dj.searchbook.data.model.Document
 import com.dj.searchbook.repository.BookRepository
 import com.dj.searchbook.util.CANNOT_LOAD_MORE
-import com.dj.searchbook.util.NO_DATA
-import com.dj.searchbook.util.PAGINATION_SIZE
+import com.dj.searchbook.util.DEFAULT_QUERY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -38,7 +33,7 @@ constructor(
         get() = _uiState
 
     private val _documents: MutableStateFlow<List<Document>> = MutableStateFlow(ArrayList())
-    private val _query = MutableStateFlow("가나다") // Default
+    private val _query = MutableStateFlow(DEFAULT_QUERY) // Default
 
     private var scrollState: Parcelable? = null
     private var canLoadMore = true
@@ -76,18 +71,17 @@ constructor(
             repository.restoreBooks(query = _query.value, page = page).collect { dataState ->
                 when (dataState) {
                     is DataState.Success -> {
-                        if (dataState.data!!.isEmpty()) {
-                            _uiState.value = SearchUiState.Error(errorMessage = NO_DATA)
-                        } else {
-                            _documents.value = dataState.data
-                            _uiState.value = SearchUiState.Restore(state = scrollState,
-                                documents = _documents.value)
-                        }
+                        _documents.value = dataState.data!!
+                        _uiState.value = SearchUiState.Restore(
+                            state = scrollState,
+                            documents = _documents.value
+                        )
                     }
                     is DataState.Error -> {
                         _uiState.value = SearchUiState.Error(
                             errorMessage = dataState.errorMessage
-                                ?: "Unknown Error")
+                                ?: "Unknown Error"
+                        )
                     }
                 }
             }
@@ -95,8 +89,6 @@ constructor(
     }
 
     fun fetchBooks(query: String) {
-        if (query.isEmpty())
-            return
         viewModelScope.launch {
             if (_uiState.value == SearchUiState.Loading) {
                 return@launch
@@ -106,12 +98,8 @@ constructor(
             repository.searchBooks(query = query, page = page).collect { dataState ->
                 when (dataState) {
                     is DataState.Success -> {
-                        if (dataState.data!!.isEmpty()) {
-                            _uiState.value = SearchUiState.Error(errorMessage = NO_DATA)
-                        } else {
-                            _documents.value = dataState.data
-                            _uiState.value = SearchUiState.Success(documents = _documents.value)
-                        }
+                        _documents.value = dataState.data!!
+                        _uiState.value = SearchUiState.Success(documents = _documents.value)
                     }
                     is DataState.Error -> {
                         if (dataState.errorMessage == CANNOT_LOAD_MORE) {

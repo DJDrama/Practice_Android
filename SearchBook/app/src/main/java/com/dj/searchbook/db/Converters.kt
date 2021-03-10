@@ -1,9 +1,8 @@
 package com.dj.searchbook.db
 
-import android.util.Log
 import androidx.room.TypeConverter
 import com.dj.searchbook.util.DateUtils
-import java.util.*
+import java.util.Date
 
 class Converters {
 

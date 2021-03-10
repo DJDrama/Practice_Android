@@ -12,12 +12,11 @@ interface ApiService {
 
     @GET("/v3/search/book")
     suspend fun getBookSearchResults(
-        @Header("Authorization") header: String= "KakaoAK $REST_API_KEY",
+        @Header("Authorization") header: String = "KakaoAK $REST_API_KEY",
         @Query("query") query: String,
-        @Query("sort") sort: String = "accuracy",
+        // @Query("sort") sort: String = "accuracy",
         @Query("page") page: Int = 1,
         @Query("size") size: Int = PAGINATION_SIZE,
         @Query("target") target: String? = null,
     ): Response<SearchResponse>
 }
-

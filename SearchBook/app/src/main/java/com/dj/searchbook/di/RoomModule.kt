@@ -1,17 +1,16 @@
 package com.dj.searchbook.di
 
+import android.content.Context
 import androidx.room.Room
-import com.dj.searchbook.BaseApplication
 import com.dj.searchbook.db.AppDatabase
+import com.dj.searchbook.db.AppDatabase.Companion.DB_NAME
 import com.dj.searchbook.db.DocumentDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import android.content.Context
-import com.dj.searchbook.db.AppDatabase.Companion.DB_NAME
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Module
 @InstallIn(SingletonComponent::class)

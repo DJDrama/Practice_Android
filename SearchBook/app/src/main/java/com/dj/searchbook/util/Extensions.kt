@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.google.android.material.snackbar.Snackbar
-import java.text.DecimalFormat
 
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -15,4 +14,3 @@ fun Context.hideKeyboard(view: View) {
 fun View.showSnackBar(msg: String) {
     Snackbar.make(this, msg, Snackbar.LENGTH_SHORT).show()
 }
-

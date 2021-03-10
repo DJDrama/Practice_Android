@@ -4,25 +4,23 @@ import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
-import com.dj.searchbook.R
-import com.dj.searchbook.databinding.FragmentBookDetailBinding
-import dagger.hilt.android.AndroidEntryPoint
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.dj.searchbook.R
+import com.dj.searchbook.databinding.FragmentBookDetailBinding
 import com.dj.searchbook.util.DateUtils
 import com.dj.searchbook.util.getNumberFormattedString
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
@@ -74,13 +72,17 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     tvAuthors.text = getString(R.string.author, document.authors.joinToString())
                     tvPublisher.text = getString(R.string.publisher, document.publisher)
                     tvDesc.text = document.contents
-                    tvDate.text = getString(R.string.release,
+                    tvDate.text = getString(
+                        R.string.release,
                         document.dateTime?.let { date ->
                             DateUtils.dateToString(date)
-                        } ?: "N/A")
-                    tvTranslators.text = getString(R.string.translators,
+                        } ?: "N/A"
+                    )
+                    tvTranslators.text = getString(
+                        R.string.translators,
                         if (document.translators.isEmpty()) "None"
-                        else document.translators.joinToString())
+                        else document.translators.joinToString()
+                    )
 
                     tvIsbn.text = getString(R.string.isbn, document.isbn)
                     tvPrice.text =
