@@ -10,4 +10,9 @@ interface BookRepository {
         query: String,
         page: Int = 1,
     ): Flow<DataState<List<Document>>>
+
+    fun restoreBooks(
+        query: String,
+        page: Int
+    ): Flow<DataState<List<Document>>>
 }

@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -36,7 +37,6 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentBookDetailBinding.bind(view)
         setHasOptionsMenu(true)
-
         args.document?.let {
             viewModel.setDetailDocument(it)
         }

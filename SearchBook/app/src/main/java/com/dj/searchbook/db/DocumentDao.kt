@@ -12,15 +12,27 @@ interface DocumentDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertDocuments(documents: List<Document>): LongArray
 
+    //         ORDER BY datetime DESC
     @Query(
         """SELECT * FROM documents 
-        WHERE title LIKE '%' || :query || '%' 
-        ORDER BY datetime DESC
+        WHERE title LIKE '%' || :query || '%'
         LIMIT :pageSize OFFSET ((:page-1)*:pageSize)"""
     )
     suspend fun searchDocuments(
         query: String,
         page: Int,
-        pageSize: Int = PAGINATION_SIZE
+        pageSize: Int = PAGINATION_SIZE,
+    ): List<Document>
+
+    //   ORDER BY datetime DESC
+    @Query(
+        """SELECT * FROM documents
+        WHERE title LIKE '%' || :query || '%' 
+        LIMIT (:page*:pageSize)"""
+    )
+    suspend fun restoreDocuments(
+        query: String,
+        page: Int,
+        pageSize: Int = PAGINATION_SIZE,
     ): List<Document>
 }

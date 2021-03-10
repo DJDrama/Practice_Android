@@ -51,6 +51,7 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
     private fun initRecyclerView() {
         searchBookAdapter = SearchBookAdapter(onItemClicked = this::onItemClicked)
         binding.recyclerView.apply {
+
             adapter = searchBookAdapter
             itemAnimator = null
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -58,6 +59,7 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
                     super.onScrollStateChanged(recyclerView, newState)
                     val lm = layoutManager as LinearLayoutManager
                     val lastPosition = lm.findLastVisibleItemPosition()
+                    viewModel.setLayoutManagerState(lm.onSaveInstanceState())
                     if (lastPosition == searchBookAdapter.itemCount - 1)
                         viewModel.loadMore()
                 }
@@ -79,6 +81,13 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
                         binding.progressBar.isVisible = false
                         searchBookAdapter.submitList(uiState.documents)
                     }
+
+                    is SearchBookViewModel.SearchUiState.Restore->{
+                        binding.progressBar.isVisible = false
+                        searchBookAdapter.submitList(uiState.documents)
+                        binding.recyclerView.layoutManager?.onRestoreInstanceState(uiState.state)
+                    }
+
                     is SearchBookViewModel.SearchUiState.Error -> {
                         binding.progressBar.isVisible = false
                         when(uiState.errorMessage){
@@ -87,9 +96,11 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
                             }
                         }
                     }
+
                     is SearchBookViewModel.SearchUiState.Loading -> {
                         binding.progressBar.isVisible = true
                     }
+
                     is SearchBookViewModel.SearchUiState.Search -> {
                         searchBookAdapter.submitList(null)
                         requireContext().hideKeyboard(binding.root)
@@ -121,14 +132,14 @@ class SearchBookFragment : Fragment(R.layout.fragment_search_book) {
                 searchEdt.setOnEditorActionListener { v, actionId, _ ->
                     if (actionId == IME_ACTION_UNSPECIFIED || actionId == IME_ACTION_SEARCH) {
                         val query = v.text.toString()
-                        viewModel.setQuery(query = query)
+                        viewModel.setSearchUiState(query = query)
                     }
                     true
                 }
                 val searchBtn = it.findViewById(R.id.search_go_btn) as View
                 searchBtn.setOnClickListener {
                     val query = searchEdt.text.toString()
-                    viewModel.setQuery(query = query)
+                    viewModel.setSearchUiState(query = query)
                 }
             }
         }

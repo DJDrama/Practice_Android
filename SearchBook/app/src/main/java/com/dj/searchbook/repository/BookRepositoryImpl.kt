@@ -1,17 +1,13 @@
 package com.dj.searchbook.repository
 
-import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import com.dj.searchbook.api.ApiService
 import com.dj.searchbook.data.DataState
 import com.dj.searchbook.data.model.Document
 import com.dj.searchbook.db.DocumentDao
 import com.dj.searchbook.util.CANNOT_LOAD_MORE
 import com.dj.searchbook.util.PAGINATION_SIZE
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class BookRepositoryImpl
@@ -49,6 +45,15 @@ constructor(
             }else {
                 emit(DataState.Error<List<Document>>(errorMessage = e.message ?: "Unkown Error!"))
             }
+        }
+    }
+
+    override fun restoreBooks(query: String, page: Int): Flow<DataState<List<Document>>> = flow{
+        try{
+            val cacheResult = documentDao.restoreDocuments(query=query, page = page)
+            emit(DataState.Success(data=cacheResult))
+        }catch(e: Exception){
+            emit(DataState.Error<List<Document>>(errorMessage = e.message ?: "Unkown Error!"))
         }
     }
 }
