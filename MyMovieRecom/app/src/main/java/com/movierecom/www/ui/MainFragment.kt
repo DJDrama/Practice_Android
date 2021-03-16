@@ -21,6 +21,7 @@ class MainFragment : Fragment(R.layout.fragment_main), View.OnClickListener {
 
     private val viewModel by viewModels<MainFragmentViewModel>()
     private lateinit var dailyBoxOfficeAdapter: DailyBoxOfficeAdapter
+    private lateinit var rankAdapter: RankAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,12 +32,19 @@ class MainFragment : Fragment(R.layout.fragment_main), View.OnClickListener {
 
         initRecyclerView()
         subscribeObservers()
+
+        viewModel.fetchQueryRank()
     }
 
     private fun initRecyclerView() {
         dailyBoxOfficeAdapter = DailyBoxOfficeAdapter(this::onBoxOfficeItemClicked)
         binding.rvDailyBoxOffice.apply{
             adapter = dailyBoxOfficeAdapter
+        }
+
+        rankAdapter = RankAdapter()
+        binding.rvKeywordRank.apply{
+            adapter = rankAdapter
         }
     }
 
@@ -49,6 +57,9 @@ class MainFragment : Fragment(R.layout.fragment_main), View.OnClickListener {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.dailyBoxOfficeList.collect {
                 dailyBoxOfficeAdapter.submitList(it)
+            }
+            viewModel.keywordList.collect{
+                rankAdapter.submitList(it)
             }
         }
     }

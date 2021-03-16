@@ -3,6 +3,7 @@ package com.movierecom.www.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movierecom.www.model.DailyBoxOffice
+import com.movierecom.www.model.SearchKeyword
 import com.movierecom.www.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,10 @@ constructor(
     val dailyBoxOfficeList
         get() = _dailyBoxOfficeList
 
+    private val _keywordList = MutableStateFlow<List<String>>(ArrayList())
+    val keywordList
+        get() = _keywordList
+
     init {
         fetchDailyBoxOffice()
     }
@@ -28,6 +33,12 @@ constructor(
     private fun fetchDailyBoxOffice() {
         repository.getDailyBoxOffice().onEach {
             _dailyBoxOfficeList.value = it
+        }.launchIn(viewModelScope)
+    }
+
+    fun fetchQueryRank() {
+        repository.getKeywordsRank().onEach{
+            _keywordList.value = it
         }.launchIn(viewModelScope)
     }
 }
