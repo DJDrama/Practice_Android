@@ -1,6 +1,8 @@
 package com.movierecom.www.di
 
+import com.movierecom.www.api.KobisService
 import com.movierecom.www.api.NaverSearchService
+import com.movierecom.www.util.KOBIS_BASE_URL
 import com.movierecom.www.util.NAVER_BASE_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -29,12 +31,18 @@ object RetrofitModule {
     fun provideRetrofitModule(moshi: Moshi): Retrofit.Builder {
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl(NAVER_BASE_URL)
     }
 
     @Singleton
     @Provides
-    fun provideRetrofitService(retrofit: Retrofit.Builder): NaverSearchService {
-        return retrofit.build().create(NaverSearchService::class.java)
+    fun provideNaverSearchService(retrofit: Retrofit.Builder): NaverSearchService {
+        return retrofit.baseUrl(NAVER_BASE_URL)
+            .build().create(NaverSearchService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideKobisService(retrofit: Retrofit.Builder): KobisService {
+        return retrofit.baseUrl(KOBIS_BASE_URL).build().create(KobisService::class.java)
     }
 }
