@@ -1,14 +1,11 @@
 package com.movierecom.www.repository
 
-import android.util.Log
-import com.movierecom.www.api.BoxOfficeResult
-import com.movierecom.www.api.DailyBoxOffice
 import com.movierecom.www.api.KobisService
 import com.movierecom.www.api.NaverSearchService
 import com.movierecom.www.db.KeywordDao
+import com.movierecom.www.model.DailyBoxOffice
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyMovieRecom</string>
+    <string name="movie_image">Movie Image</string>
+    <string name="detail">자세히</string>
 </resources>

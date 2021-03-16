@@ -1,7 +1,10 @@
 package com.movierecom.www.model
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class NaverMovie(
     val title: String,
     val link: String,
@@ -12,4 +15,4 @@ data class NaverMovie(
     val director: String,
     val actor: String,
     val userRating: Float
-)
+) : Parcelable
