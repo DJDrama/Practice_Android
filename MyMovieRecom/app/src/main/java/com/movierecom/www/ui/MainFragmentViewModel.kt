@@ -1,5 +1,8 @@
 package com.movierecom.www.ui
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movierecom.www.model.DailyBoxOffice
@@ -18,12 +21,12 @@ constructor(
     private val repository: MainRepository
 ) : ViewModel() {
 
-    private val _dailyBoxOfficeList = MutableStateFlow<List<DailyBoxOffice>>(ArrayList())
-    val dailyBoxOfficeList
+    private val _dailyBoxOfficeList = MutableLiveData<List<DailyBoxOffice>>(ArrayList())
+    val dailyBoxOfficeList: LiveData<List<DailyBoxOffice>>
         get() = _dailyBoxOfficeList
 
-    private val _keywordList = MutableStateFlow<List<String>>(ArrayList())
-    val keywordList
+    private val _keywordList = MutableLiveData<List<String>>(ArrayList())
+    val keywordList: LiveData<List<String>>
         get() = _keywordList
 
     init {

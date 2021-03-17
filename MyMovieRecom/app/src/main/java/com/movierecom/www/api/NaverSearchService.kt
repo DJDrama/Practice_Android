@@ -14,6 +14,7 @@ interface NaverSearchService {
         @Header(value = "X-Naver-Client-Id") xNaverClientId: String = clientId,
         @Header(value = "X-Naver-Client-Secret") xNaverClientSecret: String = secretId,
         @Query(value = "query") query: String,
+        @Query(value = "start") start: Int=1,
         @Query(value = "display") display: Int=10
     ): Response<SearchResponse>
 }

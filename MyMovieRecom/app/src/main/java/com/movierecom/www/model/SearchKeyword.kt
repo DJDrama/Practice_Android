@@ -10,5 +10,5 @@ data class SearchKeyword(
     @ColumnInfo(name = "search_keyword")
     val searchKeyword: String,
     @ColumnInfo(name = "count")
-    val count: Int=0
+    val count: Int=1
 )

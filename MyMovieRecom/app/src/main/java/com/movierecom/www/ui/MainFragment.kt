@@ -1,6 +1,7 @@
 package com.movierecom.www.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,37 +31,37 @@ class MainFragment : Fragment(R.layout.fragment_main), View.OnClickListener {
         binding.cardView2.setOnClickListener(this)
         binding.editText.setOnClickListener(this)
 
+        viewModel.fetchQueryRank()
+
         initRecyclerView()
         subscribeObservers()
-
-        viewModel.fetchQueryRank()
     }
 
     private fun initRecyclerView() {
         dailyBoxOfficeAdapter = DailyBoxOfficeAdapter(this::onBoxOfficeItemClicked)
-        binding.rvDailyBoxOffice.apply{
+        binding.rvDailyBoxOffice.apply {
             adapter = dailyBoxOfficeAdapter
         }
 
         rankAdapter = RankAdapter()
-        binding.rvKeywordRank.apply{
+        binding.rvKeywordRank.apply {
             adapter = rankAdapter
         }
     }
 
-    private fun onBoxOfficeItemClicked(dailyBoxOffice: DailyBoxOffice){
-        val action = MainFragmentDirections.actionMainFragmentToBoxOfficeDetailFragment(dailyBoxOffice)
+    private fun onBoxOfficeItemClicked(dailyBoxOffice: DailyBoxOffice) {
+        val action =
+            MainFragmentDirections.actionMainFragmentToBoxOfficeDetailFragment(dailyBoxOffice)
         findNavController().navigate(action)
     }
 
     private fun subscribeObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.dailyBoxOfficeList.collect {
-                dailyBoxOfficeAdapter.submitList(it)
-            }
-            viewModel.keywordList.collect{
-                rankAdapter.submitList(it)
-            }
+        viewModel.dailyBoxOfficeList.observe(viewLifecycleOwner) {
+            dailyBoxOfficeAdapter.submitList(it)
+        }
+        viewModel.keywordList.observe(viewLifecycleOwner) {
+            rankAdapter.submitList(null)
+            rankAdapter.submitList(it)
         }
     }
 

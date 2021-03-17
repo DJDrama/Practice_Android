@@ -1,10 +1,13 @@
 package com.movierecom.www.repository
 
+import android.util.Log
 import com.movierecom.www.api.KobisService
 import com.movierecom.www.api.NaverSearchService
 import com.movierecom.www.db.KeywordDao
 import com.movierecom.www.model.DailyBoxOffice
+import com.movierecom.www.model.NaverMovie
 import com.movierecom.www.model.SearchKeyword
+import com.movierecom.www.util.PAGINATION_SIZE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
@@ -47,6 +50,31 @@ constructor(
         try {
             val result = keywordDao.getKeywordsForRank()
             emit(result)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun searchQuery(query: String, start: Int): Flow<List<NaverMovie>> = flow {
+        try {
+            val naverResponse =
+                naverSearchService.searchMovies(
+                    query = query,
+                    start = start,
+                    display = PAGINATION_SIZE
+                )
+            val naverResponseBody = naverResponse.body()
+            if (naverResponse.isSuccessful && naverResponseBody != null) {
+                val movieList = naverResponseBody.items
+                if (start == 1 && movieList.isNotEmpty()) { // put keyword into cache
+                    val result = keywordDao.insert(searchKeyword = SearchKeyword(searchKeyword = query))
+                    if(result<0){ // Conflict, Update
+                        keywordDao.update(searchKeyword = query)
+                    }
+                }
+                // emit result
+                emit(movieList)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
