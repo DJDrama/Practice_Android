@@ -20,8 +20,12 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.movierecom.www.ui.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        android:label="@string/detail"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="naverMovie"
+            app:argType="com.movierecom.www.model.NaverMovie" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.movierecom.www.ui.SearchFragment"

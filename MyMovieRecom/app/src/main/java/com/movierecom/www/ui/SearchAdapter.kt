@@ -1,6 +1,5 @@
 package com.movierecom.www.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +9,8 @@ import com.movierecom.www.R
 import com.movierecom.www.databinding.ItemLayoutSearchItemBinding
 import com.movierecom.www.model.NaverMovie
 
-class SearchAdapter : ListAdapter<NaverMovie, SearchAdapter.ViewHolder>(DiffUtil) {
+class SearchAdapter(private val onClick: (NaverMovie) -> Unit) :
+    ListAdapter<NaverMovie, SearchAdapter.ViewHolder>(DiffUtil) {
     companion object DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<NaverMovie>() {
         override fun areItemsTheSame(oldItem: NaverMovie, newItem: NaverMovie): Boolean {
             return oldItem.link == newItem.link
@@ -21,10 +21,19 @@ class SearchAdapter : ListAdapter<NaverMovie, SearchAdapter.ViewHolder>(DiffUtil
         }
     }
 
-    inner class ViewHolder(private val binding: ItemLayoutSearchItemBinding) :
+    inner class ViewHolder(
+        private val binding: ItemLayoutSearchItemBinding,
+        private val onClick: (NaverMovie) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(naverMovie: NaverMovie){
-            binding.apply{
+
+        init{
+            binding.root.setOnClickListener {
+                onClick(getItem(adapterPosition))
+            }
+        }
+        fun bind(naverMovie: NaverMovie) {
+            binding.apply {
                 Glide.with(binding.root.context)
                     .load(naverMovie.image)
                     .placeholder(R.drawable.no_image)
@@ -39,7 +48,13 @@ class SearchAdapter : ListAdapter<NaverMovie, SearchAdapter.ViewHolder>(DiffUtil
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return  ViewHolder(ItemLayoutSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemLayoutSearchItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ), onClick
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

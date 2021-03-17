@@ -14,12 +14,14 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.movierecom.www.R
 import com.movierecom.www.databinding.FragmentSearchBinding
+import com.movierecom.www.model.NaverMovie
 import com.movierecom.www.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,7 +43,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
 
     private fun initRecyclerView() {
-        searchAdapter = SearchAdapter()
+        searchAdapter = SearchAdapter(::onMovieItemClick)
         binding.recyclerview.apply {
             val dividerItemDecoration = DividerItemDecoration(requireContext(), VERTICAL)
             addItemDecoration(dividerItemDecoration)
@@ -57,6 +59,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
             })
         }
+    }
+
+    private fun onMovieItemClick(naverMovie: NaverMovie) {
+        val action =
+            SearchFragmentDirections.actionSearchFragmentToDetailFragment(naverMovie = naverMovie)
+        findNavController().navigate(action)
     }
 
     private fun subscribeObservers() {
@@ -97,5 +105,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 viewModel.searchQuery(query)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding=null
     }
 }
