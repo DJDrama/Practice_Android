@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.16077898550724637" />
         <entry key="app/src/main/res/layout/item_layout_box_office.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_layout_keyword_rank_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_layout_progressbar.xml" value="0.1716485507246377" />
         <entry key="app/src/main/res/layout/item_layout_search_item.xml" value="0.25" />
         <entry key="app/src/main/res/menu/menu_search.xml" value="0.20989583333333334" />
       </map>

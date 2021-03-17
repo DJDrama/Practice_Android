@@ -3,6 +3,7 @@ package com.movierecom.www.ui
 import android.app.SearchManager
 import android.content.Context.SEARCH_SERVICE
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -10,17 +11,17 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.EditorInfo.IME_ACTION_UNSPECIFIED
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.movierecom.www.R
 import com.movierecom.www.databinding.FragmentSearchBinding
 import com.movierecom.www.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
@@ -45,16 +46,29 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             val dividerItemDecoration = DividerItemDecoration(requireContext(), VERTICAL)
             addItemDecoration(dividerItemDecoration)
             adapter = searchAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    val lm = layoutManager as LinearLayoutManager
+                    val lastPosition = lm.findLastVisibleItemPosition()
+                    if (lastPosition == searchAdapter.itemCount - 1) {
+                        onLoadMore()
+                    }
+                }
+            })
         }
     }
 
     private fun subscribeObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.movieList.collect {
-                searchAdapter.submitList(null)
-                searchAdapter.submitList(it)
-            }
+        viewModel.movieSet.observe(viewLifecycleOwner) {
+            binding.progressBar.isVisible = false
+            searchAdapter.submitList(it.toList())
         }
+    }
+
+    private fun onLoadMore() {
+        binding.progressBar.isVisible = true
+        viewModel.nextQuery()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

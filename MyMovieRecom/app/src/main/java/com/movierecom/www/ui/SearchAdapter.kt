@@ -1,5 +1,6 @@
 package com.movierecom.www.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -38,7 +39,7 @@ class SearchAdapter : ListAdapter<NaverMovie, SearchAdapter.ViewHolder>(DiffUtil
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemLayoutSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  ViewHolder(ItemLayoutSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
