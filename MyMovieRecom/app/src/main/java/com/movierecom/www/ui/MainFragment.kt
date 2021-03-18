@@ -43,10 +43,14 @@ class MainFragment : Fragment(R.layout.fragment_main), View.OnClickListener {
             adapter = dailyBoxOfficeAdapter
         }
 
-        rankAdapter = RankAdapter()
+        rankAdapter = RankAdapter(::onRankItemClick)
         binding.rvKeywordRank.apply {
             adapter = rankAdapter
         }
+    }
+    private fun onRankItemClick(query: String){
+        val action = MainFragmentDirections.actionMainFragmentToSearchFragment(query = query)
+        findNavController().navigate(action)
     }
 
     private fun onBoxOfficeItemClicked(dailyBoxOffice: DailyBoxOffice) {

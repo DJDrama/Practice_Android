@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.movierecom.www.databinding.ItemLayoutKeywordRankItemBinding
 import com.movierecom.www.model.SearchKeyword
 
-class RankAdapter : ListAdapter<String, RankAdapter.ViewHolder>(DiffUtil) {
+class RankAdapter(private val onRankItemClick: (String) -> Unit) :
+    ListAdapter<String, RankAdapter.ViewHolder>(DiffUtil) {
 
-    companion object DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<String>(){
+    companion object DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<String>() {
         override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-           return oldItem.hashCode() == newItem.hashCode()
+            return oldItem.hashCode() == newItem.hashCode()
         }
 
         override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
@@ -20,17 +21,31 @@ class RankAdapter : ListAdapter<String, RankAdapter.ViewHolder>(DiffUtil) {
 
     }
 
-    inner class ViewHolder(private val binding: ItemLayoutKeywordRankItemBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(searchKeyword: String){
+    inner class ViewHolder(
+        private val binding: ItemLayoutKeywordRankItemBinding,
+        private val onRankItemClick: (String) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+        init{
+            binding.root.setOnClickListener {
+                onRankItemClick(getItem(adapterPosition))
+            }
+        }
+        fun bind(searchKeyword: String) {
             binding.apply {
-                tvRank.text = "${adapterPosition+1}"
+                tvRank.text = "${adapterPosition + 1}"
                 tvTitle.text = searchKeyword
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemLayoutKeywordRankItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemLayoutKeywordRankItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ), onRankItemClick
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

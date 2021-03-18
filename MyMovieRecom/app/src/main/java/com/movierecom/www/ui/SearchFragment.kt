@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,11 +33,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         get() = _binding!!
     private val viewModel by viewModels<SearchViewModel>()
     private lateinit var searchAdapter: SearchAdapter
+    private val args by navArgs<SearchFragmentArgs>()
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
         setHasOptionsMenu(true)
+        args.query?.let{
+            viewModel.searchQuery(it)
+        }
         initRecyclerView()
         subscribeObservers()
     }
@@ -89,7 +96,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             searchView.isSubmitButtonEnabled = true
             searchView.onActionViewExpanded() // Always Expand
             searchView.queryHint = "검색..."
+
+
+
             val searchEdt = searchView.findViewById(R.id.search_src_text) as EditText
+
+            args.query?.let{
+                searchEdt.setText(it)
+                searchEdt.clearFocus()
+            }
+
             searchEdt.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == IME_ACTION_SEARCH || actionId == IME_ACTION_UNSPECIFIED) {
                     val query = v.text.toString()
