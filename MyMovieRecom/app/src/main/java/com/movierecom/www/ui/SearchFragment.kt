@@ -42,6 +42,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = FragmentSearchBinding.bind(view)
         setHasOptionsMenu(true)
         args.query?.let{
+            Log.e("fuck", "Come here ? " + it)
             viewModel.searchQuery(it)
         }
         initRecyclerView()
