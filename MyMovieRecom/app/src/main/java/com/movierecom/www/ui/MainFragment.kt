@@ -3,6 +3,7 @@ package com.movierecom.www.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -64,8 +65,12 @@ class MainFragment : Fragment(R.layout.fragment_main), View.OnClickListener {
             dailyBoxOfficeAdapter.submitList(it)
         }
         viewModel.keywordList.observe(viewLifecycleOwner) {
-            rankAdapter.submitList(null)
-            rankAdapter.submitList(it)
+            if(it.isNotEmpty()) {
+                binding.tvNoRankItems.isVisible=false
+                binding.rvKeywordRank.isVisible=true
+                rankAdapter.submitList(null)
+                rankAdapter.submitList(it)
+            }
         }
     }
 
