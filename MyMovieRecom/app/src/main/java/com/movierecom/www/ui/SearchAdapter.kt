@@ -1,7 +1,11 @@
 package com.movierecom.www.ui
 
+import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -32,13 +36,14 @@ class SearchAdapter(private val onClick: (NaverMovie) -> Unit) :
                 onClick(getItem(adapterPosition))
             }
         }
+        @RequiresApi(Build.VERSION_CODES.N)
         fun bind(naverMovie: NaverMovie) {
             binding.apply {
                 Glide.with(binding.root.context)
                     .load(naverMovie.image)
                     .placeholder(R.drawable.no_image)
                     .into(imageView4)
-                tvTitle.text = naverMovie.title
+                tvTitle.text = HtmlCompat.fromHtml(naverMovie.title, Html.FROM_HTML_MODE_LEGACY).toString()
                 tvYear.text = "개봉년도: ${naverMovie.pubDate}"
                 tvActors.text = "배우: ${naverMovie.actor.split("|").joinToString()}"
                 tvDirectors.text = "감독: ${naverMovie.director.split("|").joinToString()}"

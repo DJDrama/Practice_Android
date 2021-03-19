@@ -3,7 +3,9 @@ package com.movierecom.www.ui
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Html
 import android.view.View
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
@@ -25,7 +27,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDetailBinding.bind(view)
         binding.apply {
-            tvTitle.text = args.naverMovie.title
+            tvTitle.text = HtmlCompat.fromHtml(args.naverMovie.title, Html.FROM_HTML_MODE_LEGACY).toString()
             tvOpenDate.text = "개봉년도 : ${args.naverMovie.pubDate}"
 
             tvDirectors.text = "감독: ${args.naverMovie.director.split("|").joinToString()}"

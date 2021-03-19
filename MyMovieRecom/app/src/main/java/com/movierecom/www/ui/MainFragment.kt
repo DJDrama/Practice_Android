@@ -28,12 +28,9 @@ class MainFragment : Fragment(R.layout.fragment_main), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentMainBinding.bind(view)
-
         binding.cardView2.setOnClickListener(this)
         binding.editText.setOnClickListener(this)
-
         viewModel.fetchQueryRank()
-
         initRecyclerView()
         subscribeObservers()
     }
@@ -43,12 +40,12 @@ class MainFragment : Fragment(R.layout.fragment_main), View.OnClickListener {
         binding.rvDailyBoxOffice.apply {
             adapter = dailyBoxOfficeAdapter
         }
-
         rankAdapter = RankAdapter(::onRankItemClick)
         binding.rvKeywordRank.apply {
             adapter = rankAdapter
         }
     }
+
     private fun onRankItemClick(query: String){
         val action = MainFragmentDirections.actionMainFragmentToSearchFragment(query = query)
         findNavController().navigate(action)
