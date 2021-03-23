@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dj.testing.data.local.ShoppingItem
 import com.dj.testing.data.remote.responses.ImageResponse
+import com.dj.testing.other.Constants.MAX_NAME_LENGTH
+import com.dj.testing.other.Constants.MAX_PRICE_LENGTH
 import com.dj.testing.other.Event
 import com.dj.testing.other.Resource
 import com.dj.testing.repositories.ShoppingRepository
@@ -49,10 +51,43 @@ constructor(
     }
 
     fun insertShoppingItem(name: String, amountString: String, priceString: String){
-
+        if(name.isEmpty() || amountString.isEmpty() || priceString.isEmpty()){
+            _insertShoppingItemStatus.postValue(Event(Resource.error("Fields must not be empty", null)))
+            return
+        }
+        if(name.length>MAX_NAME_LENGTH){
+            _insertShoppingItemStatus.postValue(Event(Resource.error("The name of the item must not exceed $MAX_NAME_LENGTH characters", null)))
+            return
+        }
+        if(priceString.length> MAX_PRICE_LENGTH){
+            _insertShoppingItemStatus.postValue(Event(Resource.error("The price of the item must not exceed $MAX_PRICE_LENGTH characters", null)))
+            return
+        }
+        val amount = try{
+            amountString.toInt()
+        }catch(e: Exception){
+            _insertShoppingItemStatus.postValue(Event(Resource.error("Please enter a valid amount", null)))
+            return
+        }
+        val shoppingItem = ShoppingItem(
+            name = name,
+            amount = amount,
+            price = priceString.toFloat(),
+            imageUrl = _curImageUrl.value ?: ""
+        )
+        insertShoppingItemIntoDatabase(shoppingItem)
+        setCurImageUrl("")
+        _insertShoppingItemStatus.postValue(Event(Resource.success(data = shoppingItem)))
     }
 
     fun searchForImage(imageQuery: String) {
-
+        if(imageQuery.isEmpty()){
+            return
+        }
+        _images.value = Event(Resource.loading(null))
+        viewModelScope.launch{
+            val response = repository.searchForImage(imageQuery)
+            _images.value = Event(response)
+        }
     }
 }
