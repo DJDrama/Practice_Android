@@ -11,16 +11,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val action = intent?.action
-        val data = intent?.data
-
-        val textView = findViewById<TextView>(R.id.tv_textview)
-        textView.text = "$action $data ${data?.pathSegments} ${data?.host}"
+        handleData(intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Toast.makeText(this, "Come here ?", Toast.LENGTH_LONG).show()
+        handleData(intent)
+    }
+
+    private fun handleData(intent: Intent?){
+        intent?.let{
+            val data = it.data
+            val textView = findViewById<TextView>(R.id.tv_textview)
+            textView.text = "${data?.host} ${data?.pathSegments?.get(0)}"
+        }
     }
 }
