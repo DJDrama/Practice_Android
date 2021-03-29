@@ -4,15 +4,22 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.dj.intentparsedatamvvm.BaseApplication
 import com.dj.intentparsedatamvvm.databinding.ActivityMainBinding
+import javax.inject.Inject
 
 // adb shell am start -a android.intent.action.VIEW -d issues://JakeWharton/hugo/issues
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainAdapter: MainAdapter
-    private val viewModel by viewModels<MainViewModel>()
+
+
+    @Inject
+    lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as BaseApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
