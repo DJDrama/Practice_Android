@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        title = "Open Issues"
 
         initRecyclerView()
         handleData(intent)
@@ -43,9 +44,12 @@ class MainActivity : AppCompatActivity() {
     private fun handleData(intent: Intent?) {
         intent?.let {
             it.data?.let { data ->
+                val username = data.host
+                val repositoryName = data.pathSegments[0]
+                binding.tvTitle.text = "$username / $repositoryName"
                 viewModel.fetchIssues(
-                    username = data.host ?: "",
-                    repositoryName = data.pathSegments[0]
+                    username = username ?: "",
+                    repositoryName = repositoryName
                 )
             }
         }
