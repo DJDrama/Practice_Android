@@ -5,31 +5,56 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dj.intentparsedatamvvm.data.model.Issue
+import androidx.viewbinding.ViewBinding
+import com.bumptech.glide.Glide
+import com.dj.intentparsedatamvvm.data.ListItemHolder
 import com.dj.intentparsedatamvvm.databinding.ItemCardLayoutBinding
+import com.dj.intentparsedatamvvm.databinding.ItemImageLayoutBinding
 
-class MainAdapter : ListAdapter<Issue, IssueViewHolder>(DIFF_CALLBACK) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IssueViewHolder {
-        return IssueViewHolder(
-            ItemCardLayoutBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+
+class MainAdapter : ListAdapter<ListItemHolder, ListItemHolderViewHolder>(DIFF_CALLBACK) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemHolderViewHolder {
+        return ListItemHolderViewHolder(
+            if (viewType == ITEM)
+                ItemCardLayoutBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            else
+                ItemImageLayoutBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
         )
     }
 
-    override fun onBindViewHolder(holder: IssueViewHolder, position: Int) {
+    override fun getItemViewType(position: Int): Int {
+        val item = getItem(position)
+        return item.image?.let {
+            IMAGE
+        } ?: ITEM
+    }
+
+    override fun onBindViewHolder(holder: ListItemHolderViewHolder, position: Int) {
         return holder.bind(getItem(position))
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Issue>() {
-            override fun areItemsTheSame(oldItem: Issue, newItem: Issue): Boolean {
-                return oldItem.number == newItem.number
+        const val ITEM = 0
+        const val IMAGE = 1
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListItemHolder>() {
+            override fun areItemsTheSame(
+                oldItem: ListItemHolder,
+                newItem: ListItemHolder
+            ): Boolean {
+                return oldItem.issue?.number == newItem.issue?.number
             }
 
-            override fun areContentsTheSame(oldItem: Issue, newItem: Issue): Boolean {
+            override fun areContentsTheSame(
+                oldItem: ListItemHolder,
+                newItem: ListItemHolder
+            ): Boolean {
                 return oldItem == newItem
             }
 
@@ -37,9 +62,12 @@ class MainAdapter : ListAdapter<Issue, IssueViewHolder>(DIFF_CALLBACK) {
     }
 }
 
-class IssueViewHolder(private val binding: ItemCardLayoutBinding) :
+class ListItemHolderViewHolder(private val binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(issue: Issue) {
-        binding.tvDesc.text = "#${issue.number} ${issue.title}"
+    fun bind(listItemHolder: ListItemHolder) {
+        if (binding is ItemCardLayoutBinding)
+            binding.tvDesc.text = "#${listItemHolder.issue?.number} ${listItemHolder.issue?.title}"
+        else if (binding is ItemImageLayoutBinding)
+            Glide.with(binding.root.context).load(listItemHolder.image).into(binding.ivImage)
     }
 }
