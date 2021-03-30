@@ -16,10 +16,12 @@
         tools:layout="@layout/fragment_register" />
     <action
         android:id="@+id/action_global_loginFragment"
-        app:destination="@id/loginFragment" />
+        app:destination="@id/loginFragment"
+        app:launchSingleTop="true" />
     <action
         android:id="@+id/action_global_registerFragment2"
-        app:destination="@id/registerFragment2" />
+        app:destination="@id/registerFragment2"
+        app:launchSingleTop="true" />
     <fragment
         android:id="@+id/userDetailFragment"
         tools:layout="@layout/fragment_user_intro"

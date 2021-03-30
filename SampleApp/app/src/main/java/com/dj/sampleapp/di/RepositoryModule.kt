@@ -1,6 +1,7 @@
 package com.dj.sampleapp.di
 
 import com.dj.sampleapp.api.RetrofitService
+import com.dj.sampleapp.repository.AuthRepository
 import com.dj.sampleapp.repository.MainRepository
 import dagger.Module
 import dagger.Provides
@@ -11,6 +12,17 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
+
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        network: RetrofitService,
+    ): AuthRepository {
+        return AuthRepository(
+            retrofitService = network,
+        )
+    }
 
     @Provides
     @Singleton
