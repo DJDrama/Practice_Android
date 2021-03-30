@@ -12,4 +12,5 @@
     <string name="card_detail">카드 설명: %s</string>
     <string name="author">작성자: %s</string>
     <string name="recommend_card">추천 카드 : 카드를 클릭해보세요.</string>
+    <string name="logout">로그아웃</string>
 </resources>

@@ -7,5 +7,5 @@ data class RegistrationResponse(
     @Json(name = "error_msg")
     val errorMsg: String?,
     @Json(name = "user_id")
-    val userId: Int
+    val userId: Int?
 )

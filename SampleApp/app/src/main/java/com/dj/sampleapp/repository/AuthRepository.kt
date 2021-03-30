@@ -17,7 +17,9 @@ class AuthRepository(
             val userRegistration = UserRegistration(nickname = nickname, pwd = pwd)
             val response = retrofitService.login(userRegistration = userRegistration)
             if (response.ok) {
-                emit(DataState.Success(data = response.userId))
+                response.userId?.let{userId->
+                    emit(DataState.Success(data = userId))
+                }
             } else {
                 emit(
                     DataState.Error<Int>(
@@ -37,7 +39,9 @@ class AuthRepository(
                 UserRegistration(nickname = nickname, pwd = pwd, introduction = introduction)
             val response = retrofitService.registerUser(userRegistration = userRegistration)
             if (response.ok) {
-                emit(DataState.Success(data = response.userId))
+                response.userId?.let { userId ->
+                    emit(DataState.Success(data = userId))
+                }
             } else {
                 emit(
                     DataState.Error<Int>(
