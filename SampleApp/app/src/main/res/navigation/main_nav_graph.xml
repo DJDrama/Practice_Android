@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/containerFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.dj.sampleapp.ui.auth.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/registerFragment2"
+        android:name="com.dj.sampleapp.ui.auth.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment" />
+    <action
+        android:id="@+id/action_global_registerFragment2"
+        app:destination="@id/registerFragment2" />
+    <fragment
+        android:id="@+id/userDetailFragment"
+        tools:layout="@layout/fragment_user_intro"
+        android:name="com.dj.sampleapp.ui.main.UserDetailFragment"
+        android:label="UserDetailFragment" >
+        <argument
+            android:name="user_id"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/containerFragment"
+        android:name="com.dj.sampleapp.ui.main.ContainerFragment"
+        android:label="fragment_container"
+        tools:layout="@layout/fragment_container" >
+        <action
+            android:id="@+id/action_containerFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+        <action
+            android:id="@+id/action_containerFragment_to_popularCardDetailFragment"
+            app:destination="@id/popularCardDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/popularCardDetailFragment"
+        tools:layout="@layout/fragment_popular_card_detail"
+        android:name="com.dj.sampleapp.ui.main.PopularCardDetailFragment"
+        android:label="PopularCardDetailFragment" >
+        <argument
+            android:name="card_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_popularCardDetailFragment_self"
+            app:destination="@id/popularCardDetailFragment" />
+    </fragment>
+</navigation>

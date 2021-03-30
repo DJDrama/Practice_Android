@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="108dp"
+    android:layout_height="108dp"
+    android:id="@+id/iv_card"
+    android:scaleType="fitXY"
+    tools:src="@tools:sample/avatars">
+
+</ImageView>

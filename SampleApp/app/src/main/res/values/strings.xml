@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SnsApp</string>
+    <string name="register">가입</string>
+    <string name="popular_cards">인기 카드 : 카드를 클릭해보세요.</string>
+    <string name="popular_users">인기 유저 : 유저를 클릭해보세요.</string>
+    <string name="nickname">닉네임</string>
+    <string name="password">비밀번호</string>
+    <string name="login">로그인</string>
+    <string name="introduction">소개</string>
+    <string name="nickname_detail">닉네임: %s</string>
+    <string name="intro_detail">소개: %s</string>
+    <string name="card_detail">카드 설명: %s</string>
+    <string name="author">작성자: %s</string>
+    <string name="recommend_card">추천 카드 : 카드를 클릭해보세요.</string>
+</resources>
