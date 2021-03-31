@@ -28,9 +28,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.buttonLogin.setOnClickListener(this)
-        binding.buttonRegister.setOnClickListener(this)
-        binding.buttonLogout.setOnClickListener(this)
+        binding.apply {
+            buttonLogin.setOnClickListener(this@MainActivity)
+            buttonRegister.setOnClickListener(this@MainActivity)
+            buttonLogout.setOnClickListener(this@MainActivity)
+        }
+
 
         subscribeToObservers()
     }
@@ -65,7 +68,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 navController.navigate(R.id.action_global_registerFragment2)
             }
             binding.buttonLogout -> {
-
+                // logout
+                binding.apply {
+                    buttonLogin.isVisible = true
+                    buttonRegister.isVisible = true
+                    buttonLogout.isVisible = false
+                }
             }
         }
     }

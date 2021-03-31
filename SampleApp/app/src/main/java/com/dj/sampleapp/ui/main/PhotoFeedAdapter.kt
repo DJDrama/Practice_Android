@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dj.sampleapp.data.model.PopularCard
 import com.dj.sampleapp.databinding.ItemFeedCardLayoutBinding
-import com.dj.sampleapp.ui.onTouchListener
 
 class PhotoFeedAdapter(private val onItemClickListener: (PopularCard)->Unit) :
     ListAdapter<PopularCard, PhotoFeedAdapter.PopularCardViewHolder>(DIFF_CALLBACK) {
