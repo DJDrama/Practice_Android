@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
     private val viewModel by viewModels<AuthViewModel>()
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -33,7 +32,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             buttonRegister.setOnClickListener(this@MainActivity)
             buttonLogout.setOnClickListener(this@MainActivity)
         }
-
 
         subscribeToObservers()
     }
@@ -69,6 +67,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             binding.buttonLogout -> {
                 // logout
+                viewModel.logOut()
                 binding.apply {
                     buttonLogin.isVisible = true
                     buttonRegister.isVisible = true

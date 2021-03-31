@@ -57,6 +57,10 @@ constructor(
         }
     }
 
+    fun logOut(){
+        _uiState.value = UiState.Empty
+    }
+
 
     sealed class UiState {
         object Success : UiState()

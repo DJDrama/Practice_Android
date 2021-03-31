@@ -36,7 +36,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             viewModel.uiState.collect {
                 when (it) {
                     is AuthViewModel.UiState.Success -> {
-                        findNavController().navigateUp()
+                        findNavController().popBackStack()
                     }
                     is AuthViewModel.UiState.Error -> {
                         requireContext().showToast(it.errorMessage)
