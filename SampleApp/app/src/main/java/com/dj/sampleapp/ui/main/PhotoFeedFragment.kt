@@ -3,6 +3,7 @@ package com.dj.sampleapp.ui.main
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -37,8 +38,6 @@ class PhotoFeedFragment : Fragment(R.layout.fragment_photo_feed) {
     private fun initRecyclerView() {
         binding.recyclerview.apply {
             photoFeedAdapter = PhotoFeedAdapter(::onCardItemClicked)
-            adapter = photoFeedAdapter
-
             itemAnimator = null
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -50,11 +49,15 @@ class PhotoFeedFragment : Fragment(R.layout.fragment_photo_feed) {
                     }
                 }
             })
+            adapter = photoFeedAdapter
+
         }
     }
 
     private fun onCardItemClicked(popularCard: PopularCard) {
-        val action = ContainerFragmentDirections.actionContainerFragmentToPopularCardDetailFragment(popularCard.id)
+        val action = ContainerFragmentDirections.actionContainerFragmentToPopularCardDetailFragment(
+            popularCard.id
+        )
         findNavController().navigate(action)
     }
 
@@ -62,17 +65,19 @@ class PhotoFeedFragment : Fragment(R.layout.fragment_photo_feed) {
     private fun subscribeToObservers() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect {
-                if(binding.swipeRefreshLayout.isRefreshing){
-                    binding.swipeRefreshLayout.isRefreshing=false
+                if (binding.swipeRefreshLayout.isRefreshing) {
+                    binding.swipeRefreshLayout.isRefreshing = false
                 }
                 when (it) {
                     is PhotoFeedViewModel.UiState.Success -> {
-                        photoFeedAdapter.submitList(it.data)
+                        binding.tvReqeustFail.isVisible = false
+                        val tempList = ArrayList(it.data)
+                        photoFeedAdapter.submitList(tempList)
                     }
                     is PhotoFeedViewModel.UiState.Error -> {
-
+                        binding.tvReqeustFail.isVisible = true
                     }
-                    is PhotoFeedViewModel.UiState.Loading->{
+                    is PhotoFeedViewModel.UiState.Loading -> {
 
                     }
                     else -> {

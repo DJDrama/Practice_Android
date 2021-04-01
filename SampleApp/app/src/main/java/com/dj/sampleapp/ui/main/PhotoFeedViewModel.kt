@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.dj.sampleapp.api.RetrofitService
 import com.dj.sampleapp.data.DataState
 import com.dj.sampleapp.data.model.PopularCard
+import com.dj.sampleapp.other.PAGINATION_SIZE
 import com.dj.sampleapp.repository.MainRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -30,6 +31,7 @@ constructor(
 
     private var currentList = mutableListOf<PopularCard>()
     private var page = 1
+    private var canLoadMore = true
 
     init {
         fetchPopularCards()
@@ -37,14 +39,16 @@ constructor(
 
     private fun fetchPopularCards() {
         viewModelScope.launch {
-            if(_uiState.value == UiState.Loading)
+            if (!canLoadMore || _uiState.value == UiState.Loading)
                 return@launch
             _uiState.value = UiState.Loading
             repository.fetchPhotoFeeds(page = page).collect {
                 when (it) {
                     is DataState.Success -> {
                         it.data?.let { list ->
-                            currentList = list.toMutableList()
+                            if(list.size< PAGINATION_SIZE)
+                                canLoadMore = false
+                            currentList.addAll(list)
                             _uiState.value = UiState.Success(data = currentList)
                         }
                     }
@@ -60,13 +64,15 @@ constructor(
 
     private fun onNextPopularCards() {
         viewModelScope.launch {
-            if(_uiState.value == UiState.Loading)
+            if (!canLoadMore || _uiState.value == UiState.Loading)
                 return@launch
             _uiState.value = UiState.Loading
             repository.fetchPhotoFeeds(page = page).collect {
                 when (it) {
                     is DataState.Success -> {
                         it.data?.let { list ->
+                            if(list.size< PAGINATION_SIZE)
+                                canLoadMore = false
                             currentList.addAll(list)
                             _uiState.value = UiState.Success(data = currentList)
                         }
@@ -87,11 +93,13 @@ constructor(
 
     private fun resetPage() {
         this.page = 1
+        currentList.clear()
+        canLoadMore = true
         fetchPopularCards()
     }
 
 
-     fun incrementPage() {
+    fun incrementPage() {
         this.page += 1
         onNextPopularCards()
     }

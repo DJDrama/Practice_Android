@@ -20,9 +20,6 @@ class PhotoFeedAdapter(private val onItemClickListener: (PopularCard) -> Unit) :
 
         override fun areContentsTheSame(oldItem: PopularCard, newItem: PopularCard): Boolean {
             return oldItem.id == newItem.id
-                    && oldItem.imgUrl == newItem.imgUrl
-                    && oldItem.description == newItem.description
-                    && oldItem.userId == newItem.userId
         }
     }
 

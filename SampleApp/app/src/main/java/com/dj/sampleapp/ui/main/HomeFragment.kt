@@ -2,6 +2,7 @@ package com.dj.sampleapp.ui.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -66,6 +67,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
                 when (it) {
                     is HomeViewModel.UiState.Success -> {
+                        binding.tvReqeustFail.isVisible=false
+
                         if(popularCardsAdapter.itemCount!=0)
                             popularCardsAdapter.submitList(null)
                         if(popularUsersAdapter.itemCount!=0)
@@ -75,6 +78,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         popularUsersAdapter.submitList(it.data["popular_users"] as MutableList<PopularUser>)
                     }
                     is HomeViewModel.UiState.Error -> {
+                        binding.tvReqeustFail.isVisible=true
 
                     }
                     else -> {
