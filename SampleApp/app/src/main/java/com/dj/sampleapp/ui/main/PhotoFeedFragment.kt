@@ -1,11 +1,14 @@
 package com.dj.sampleapp.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dj.sampleapp.R
 import com.dj.sampleapp.data.model.PopularCard
 import com.dj.sampleapp.databinding.FragmentPhotoFeedBinding
@@ -35,6 +38,18 @@ class PhotoFeedFragment : Fragment(R.layout.fragment_photo_feed) {
         binding.recyclerview.apply {
             photoFeedAdapter = PhotoFeedAdapter(::onCardItemClicked)
             adapter = photoFeedAdapter
+
+            itemAnimator = null
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    val lm = layoutManager as LinearLayoutManager
+                    val lastPosition = lm.findLastVisibleItemPosition()
+                    if (lastPosition == photoFeedAdapter.itemCount - 1) {
+                        viewModel.incrementPage()
+                    }
+                }
+            })
         }
     }
 
@@ -55,6 +70,9 @@ class PhotoFeedFragment : Fragment(R.layout.fragment_photo_feed) {
                         photoFeedAdapter.submitList(it.data)
                     }
                     is PhotoFeedViewModel.UiState.Error -> {
+
+                    }
+                    is PhotoFeedViewModel.UiState.Loading->{
 
                     }
                     else -> {

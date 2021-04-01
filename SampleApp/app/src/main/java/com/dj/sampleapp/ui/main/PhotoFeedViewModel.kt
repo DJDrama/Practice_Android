@@ -28,19 +28,47 @@ constructor(
         MutableStateFlow(UiState.Empty)
     val uiState: StateFlow<UiState> = _uiState
 
+    private var currentList = mutableListOf<PopularCard>()
     private var page = 1
 
     init {
         fetchPopularCards()
     }
 
-    fun fetchPopularCards() {
+    private fun fetchPopularCards() {
         viewModelScope.launch {
+            if(_uiState.value == UiState.Loading)
+                return@launch
+            _uiState.value = UiState.Loading
             repository.fetchPhotoFeeds(page = page).collect {
                 when (it) {
                     is DataState.Success -> {
                         it.data?.let { list ->
-                            _uiState.value = UiState.Success(data = list)
+                            currentList = list.toMutableList()
+                            _uiState.value = UiState.Success(data = currentList)
+                        }
+                    }
+                    is DataState.Error -> {
+                        it.errorMessage?.let { errorMsg ->
+                            _uiState.value = UiState.Error(errorMessage = errorMsg)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onNextPopularCards() {
+        viewModelScope.launch {
+            if(_uiState.value == UiState.Loading)
+                return@launch
+            _uiState.value = UiState.Loading
+            repository.fetchPhotoFeeds(page = page).collect {
+                when (it) {
+                    is DataState.Success -> {
+                        it.data?.let { list ->
+                            currentList.addAll(list)
+                            _uiState.value = UiState.Success(data = currentList)
                         }
                     }
                     is DataState.Error -> {
@@ -55,25 +83,23 @@ constructor(
 
     fun refresh() {
         resetPage()
-        _uiState.value = UiState.Empty
-        fetchPopularCards()
     }
 
     private fun resetPage() {
         this.page = 1
+        fetchPopularCards()
     }
 
-    fun nextPopularCards() {
-        incrementPage()
-    }
 
-    private fun incrementPage() {
+     fun incrementPage() {
         this.page += 1
+        onNextPopularCards()
     }
 
     sealed class UiState {
         data class Success(val data: List<PopularCard>) : UiState()
         data class Error(val errorMessage: String) : UiState()
+        object Loading : UiState()
         object Empty : UiState()
     }
 }

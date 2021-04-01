@@ -1,5 +1,6 @@
 package com.dj.sampleapp.ui.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.dj.sampleapp.data.model.PopularCard
 import com.dj.sampleapp.databinding.ItemFeedCardLayoutBinding
 
-class PhotoFeedAdapter(private val onItemClickListener: (PopularCard)->Unit) :
+class PhotoFeedAdapter(private val onItemClickListener: (PopularCard) -> Unit) :
     ListAdapter<PopularCard, PhotoFeedAdapter.PopularCardViewHolder>(DIFF_CALLBACK) {
 
     companion object DIFF_CALLBACK : DiffUtil.ItemCallback<PopularCard>() {
@@ -18,20 +19,28 @@ class PhotoFeedAdapter(private val onItemClickListener: (PopularCard)->Unit) :
         }
 
         override fun areContentsTheSame(oldItem: PopularCard, newItem: PopularCard): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
+                    && oldItem.imgUrl == newItem.imgUrl
+                    && oldItem.description == newItem.description
+                    && oldItem.userId == newItem.userId
         }
     }
 
-    class PopularCardViewHolder(private val binding: ItemFeedCardLayoutBinding, private val onItemClickListener: (PopularCard)->Unit) :
+    class PopularCardViewHolder(
+        private val binding: ItemFeedCardLayoutBinding,
+        private val onItemClickListener: (PopularCard) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
-        private var popularCard: PopularCard?=null
-        init{
+        private var popularCard: PopularCard? = null
+
+        init {
             binding.root.setOnClickListener {
-                this.popularCard?.let{
+                this.popularCard?.let {
                     onItemClickListener(it)
                 }
             }
         }
+
         fun bind(popularCard: PopularCard) {
             this.popularCard = popularCard
             Glide.with(binding.root.context).load(popularCard.imgUrl).into(binding.imageView)
@@ -40,9 +49,13 @@ class PhotoFeedAdapter(private val onItemClickListener: (PopularCard)->Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularCardViewHolder {
-        return PopularCardViewHolder(ItemFeedCardLayoutBinding.inflate(LayoutInflater.from(parent.context),
-            parent,
-            false), onItemClickListener)
+        return PopularCardViewHolder(
+            ItemFeedCardLayoutBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ), onItemClickListener
+        )
     }
 
     override fun onBindViewHolder(holder: PopularCardViewHolder, position: Int) {
