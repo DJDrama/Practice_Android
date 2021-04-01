@@ -8,4 +8,4 @@ data class PopularUser(
     val nickname: String,
     val introduction: String,
     val id: Int
-): Parcelable
+) : Parcelable

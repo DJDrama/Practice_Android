@@ -22,16 +22,21 @@ class PopularCardsAdapter(private val onItemClickListener: (PopularCard) -> Unit
         }
     }
 
-    class PopularCardViewHolder(private val binding: ItemPopularCardLayoutBinding, private val onItemClickListener: (PopularCard) -> Unit) :
+    class PopularCardViewHolder(
+        private val binding: ItemPopularCardLayoutBinding,
+        private val onItemClickListener: (PopularCard) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
-        private var popularCard: PopularCard?=null
-        init{
+        private var popularCard: PopularCard? = null
+
+        init {
             binding.root.setOnClickListener {
-                this.popularCard?.let{
+                this.popularCard?.let {
                     onItemClickListener(it)
                 }
             }
         }
+
         fun bind(popularCard: PopularCard) {
             this.popularCard = popularCard
             Glide.with(binding.root.context).load(popularCard.imgUrl).into(binding.ivCard)
@@ -39,9 +44,13 @@ class PopularCardsAdapter(private val onItemClickListener: (PopularCard) -> Unit
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularCardViewHolder {
-        return PopularCardViewHolder(ItemPopularCardLayoutBinding.inflate(LayoutInflater.from(parent.context),
-            parent,
-            false), onItemClickListener)
+        return PopularCardViewHolder(
+            ItemPopularCardLayoutBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ), onItemClickListener
+        )
     }
 
     override fun onBindViewHolder(holder: PopularCardViewHolder, position: Int) {

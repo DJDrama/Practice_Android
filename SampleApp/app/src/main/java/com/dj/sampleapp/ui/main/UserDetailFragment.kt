@@ -2,6 +2,7 @@ package com.dj.sampleapp.ui.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -43,13 +44,14 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_intro) {
                 }
                 when (it) {
                     is UserDetailViewModel.UiState.Success -> {
+                        binding.tvReqeustFail.isVisible = false
                         binding.tvNickname.text =
                             resources.getString(R.string.nickname_detail, it.data.nickname)
                         binding.tvIntro.text =
                             resources.getString(R.string.intro_detail, it.data.introduction)
                     }
                     is UserDetailViewModel.UiState.Error -> {
-
+                        binding.tvReqeustFail.isVisible = true
                     }
                     else -> {
 

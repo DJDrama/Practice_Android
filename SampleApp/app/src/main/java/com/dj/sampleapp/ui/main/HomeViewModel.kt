@@ -2,18 +2,13 @@ package com.dj.sampleapp.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dj.sampleapp.api.RetrofitService
 import com.dj.sampleapp.data.DataState
 import com.dj.sampleapp.repository.MainRepository
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,7 +43,7 @@ constructor(
         }
     }
 
-    fun refresh(){
+    fun refresh() {
         _uiState.value = UiState.Empty
         fetchHomeData()
     }

@@ -8,4 +8,4 @@ data class LogInResponse(
     val errorMsg: String?,
     @Json(name = "user_id")
     val userId: Int?,
-    )
+)

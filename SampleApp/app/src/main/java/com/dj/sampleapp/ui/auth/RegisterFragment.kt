@@ -2,13 +2,11 @@ package com.dj.sampleapp.ui.auth
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.dj.sampleapp.R
-import com.dj.sampleapp.databinding.FragmentLoginBinding
 import com.dj.sampleapp.databinding.FragmentRegisterBinding
 import com.dj.sampleapp.ui.showToast
 import kotlinx.coroutines.flow.collect

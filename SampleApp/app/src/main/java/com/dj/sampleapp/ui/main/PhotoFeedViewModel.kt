@@ -1,22 +1,16 @@
 package com.dj.sampleapp.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dj.sampleapp.api.RetrofitService
 import com.dj.sampleapp.data.DataState
 import com.dj.sampleapp.data.model.PopularCard
 import com.dj.sampleapp.other.PAGINATION_SIZE
 import com.dj.sampleapp.repository.MainRepository
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,7 +40,7 @@ constructor(
                 when (it) {
                     is DataState.Success -> {
                         it.data?.let { list ->
-                            if(list.size< PAGINATION_SIZE)
+                            if (list.size < PAGINATION_SIZE)
                                 canLoadMore = false
                             currentList.addAll(list)
                             _uiState.value = UiState.Success(data = currentList)
@@ -71,7 +65,7 @@ constructor(
                 when (it) {
                     is DataState.Success -> {
                         it.data?.let { list ->
-                            if(list.size< PAGINATION_SIZE)
+                            if (list.size < PAGINATION_SIZE)
                                 canLoadMore = false
                             currentList.addAll(list)
                             _uiState.value = UiState.Success(data = currentList)

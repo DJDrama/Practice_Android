@@ -49,7 +49,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun onCardItemClick(popularCard: PopularCard) {
         val action = ContainerFragmentDirections.actionContainerFragmentToPopularCardDetailFragment(
-            popularCard.id)
+            popularCard.id
+        )
         findNavController().navigate(action)
     }
 
@@ -67,18 +68,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
                 when (it) {
                     is HomeViewModel.UiState.Success -> {
-                        binding.tvReqeustFail.isVisible=false
+                        binding.tvReqeustFail.isVisible = false
 
-                        if(popularCardsAdapter.itemCount!=0)
+                        if (popularCardsAdapter.itemCount != 0)
                             popularCardsAdapter.submitList(null)
-                        if(popularUsersAdapter.itemCount!=0)
+                        if (popularUsersAdapter.itemCount != 0)
                             popularUsersAdapter.submitList(null)
 
                         popularCardsAdapter.submitList(it.data["popular_cards"] as MutableList<PopularCard>)
                         popularUsersAdapter.submitList(it.data["popular_users"] as MutableList<PopularUser>)
                     }
                     is HomeViewModel.UiState.Error -> {
-                        binding.tvReqeustFail.isVisible=true
+                        binding.tvReqeustFail.isVisible = true
 
                     }
                     else -> {

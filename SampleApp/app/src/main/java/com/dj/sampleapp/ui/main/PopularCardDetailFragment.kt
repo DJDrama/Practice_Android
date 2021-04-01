@@ -2,6 +2,7 @@ package com.dj.sampleapp.ui.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-
 class PopularCardDetailFragment : Fragment(R.layout.fragment_popular_card_detail) {
 
     private val args by navArgs<PopularCardDetailFragmentArgs>()
@@ -63,6 +63,7 @@ class PopularCardDetailFragment : Fragment(R.layout.fragment_popular_card_detail
                 }
                 when (it) {
                     is PopularCardDetailViewModel.UiState.Success -> {
+                        binding.tvReqeustFail.isVisible = false
                         val data = it.data
 
                         // card
@@ -82,7 +83,7 @@ class PopularCardDetailFragment : Fragment(R.layout.fragment_popular_card_detail
                         popularCardsAdapter.submitList(recomCards)
                     }
                     is PopularCardDetailViewModel.UiState.Error -> {
-
+                        binding.tvReqeustFail.isVisible = true
                     }
                     else -> {
 

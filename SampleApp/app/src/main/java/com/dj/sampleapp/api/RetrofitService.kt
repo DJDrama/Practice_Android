@@ -3,11 +3,7 @@ package com.dj.sampleapp.api
 import com.dj.sampleapp.data.model.UserRegistration
 import com.dj.sampleapp.data.responses.*
 import com.dj.sampleapp.other.PAGINATION_SIZE
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface RetrofitService {
     @POST("users/sign_in")

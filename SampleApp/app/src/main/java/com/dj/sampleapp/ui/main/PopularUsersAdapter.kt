@@ -1,8 +1,6 @@
 package com.dj.sampleapp.ui.main
 
 import android.view.LayoutInflater
-import android.view.MotionEvent.ACTION_DOWN
-import android.view.MotionEvent.ACTION_UP
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -45,9 +43,13 @@ class PopularUsersAdapter(private val onClick: (PopularUser) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularUserViewHolder {
-        return PopularUserViewHolder(ItemPopularUserLayoutBinding.inflate(LayoutInflater.from(parent.context),
-            parent,
-            false), onClick)
+        return PopularUserViewHolder(
+            ItemPopularUserLayoutBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ), onClick
+        )
     }
 
     override fun onBindViewHolder(holder: PopularUserViewHolder, position: Int) {

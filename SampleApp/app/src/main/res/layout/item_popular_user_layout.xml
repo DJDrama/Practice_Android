@@ -17,5 +17,4 @@
         android:layout_height="wrap_content"
         tools:text="a소개합니다." />
 
-
 </LinearLayout>

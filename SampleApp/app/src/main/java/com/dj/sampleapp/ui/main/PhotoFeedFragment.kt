@@ -1,7 +1,6 @@
 package com.dj.sampleapp.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -71,11 +70,13 @@ class PhotoFeedFragment : Fragment(R.layout.fragment_photo_feed) {
                 when (it) {
                     is PhotoFeedViewModel.UiState.Success -> {
                         binding.tvReqeustFail.isVisible = false
+                        binding.recyclerview.isVisible = true
                         val tempList = ArrayList(it.data)
                         photoFeedAdapter.submitList(tempList)
                     }
                     is PhotoFeedViewModel.UiState.Error -> {
                         binding.tvReqeustFail.isVisible = true
+                        binding.recyclerview.isVisible = false
                     }
                     is PhotoFeedViewModel.UiState.Loading -> {
 

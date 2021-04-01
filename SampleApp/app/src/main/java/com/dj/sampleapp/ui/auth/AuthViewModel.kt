@@ -23,8 +23,6 @@ constructor(
         get() = _uiState
 
     fun login(nickname: String, pwd: String) {
-        // need to reset for failure attempts
-        _uiState.value = UiState.Empty
         viewModelScope.launch {
             authRepository.login(nickname = nickname, pwd = pwd).collect {
                 when (it) {
@@ -33,6 +31,8 @@ constructor(
                     }
                     is DataState.Error -> {
                         _uiState.value = UiState.Error(it.errorMessage ?: "Unknown Error")
+                        // need to reset for failure attempts
+                        _uiState.value = UiState.Empty
                     }
                 }
             }
@@ -40,8 +40,6 @@ constructor(
     }
 
     fun register(nickname: String, pwd: String, introduction: String) {
-        // need to reset for failure attempts
-        _uiState.value = UiState.Empty
         viewModelScope.launch {
             authRepository.register(nickname = nickname, pwd = pwd, introduction = introduction)
                 .collect {
@@ -51,6 +49,8 @@ constructor(
                         }
                         is DataState.Error -> {
                             _uiState.value = UiState.Error(it.errorMessage ?: "Unknown Error")
+                            // need to reset for failure attempts
+                            _uiState.value = UiState.Empty
                         }
                     }
                 }

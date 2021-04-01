@@ -7,8 +7,8 @@ import com.squareup.moshi.Json
 data class CardDetailResponse(
     val ok: Boolean,
     val msg: String?,
-    val card : PopularCard,
+    val card: PopularCard,
     val user: PopularUser,
-    @Json(name="recommend_cards")
+    @Json(name = "recommend_cards")
     val recommendCards: List<PopularCard>
 )
