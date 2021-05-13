@@ -1,12 +1,14 @@
 package com.movierecom.www.repository
 
-import android.util.Log
 import com.movierecom.www.api.KobisService
 import com.movierecom.www.api.NaverSearchService
+import com.movierecom.www.api.TmdbService
 import com.movierecom.www.db.KeywordDao
 import com.movierecom.www.model.DailyBoxOffice
 import com.movierecom.www.model.NaverMovie
 import com.movierecom.www.model.SearchKeyword
+import com.movierecom.www.model.TmdbMovie
+import com.movierecom.www.model.TmdbTrailer
 import com.movierecom.www.util.PAGINATION_SIZE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,7 +19,8 @@ class MainRepository
 constructor(
     private val naverSearchService: NaverSearchService,
     private val keywordDao: KeywordDao,
-    private val kobisService: KobisService
+    private val kobisService: KobisService,
+    private val tmdbService: TmdbService,
 ) {
 
     fun getDailyBoxOffice(): Flow<List<DailyBoxOffice>> = flow {
@@ -76,6 +79,23 @@ constructor(
                 emit(movieList)
             }
         } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun getTrailer(query: String): Flow<String> = flow{
+        try{
+            val tmdbMovieResponse = tmdbService.getMovies(query = query)
+            val responseBody = tmdbMovieResponse.body()
+            if(tmdbMovieResponse.isSuccessful && responseBody!=null){
+                val movieList = responseBody.results
+                val tmdbTrailerResponse = tmdbService.getTrailer(movieId = movieList[0].id)
+                val trailerResponseBody = tmdbTrailerResponse.body()
+                if(tmdbTrailerResponse.isSuccessful && trailerResponseBody!=null){
+                    emit(trailerResponseBody.results[0].key)
+                }
+            }
+        }catch(e: Exception){
             e.printStackTrace()
         }
     }

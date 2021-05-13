@@ -16,5 +16,5 @@ interface NaverSearchService {
         @Query(value = "query") query: String,
         @Query(value = "start") start: Int=1,
         @Query(value = "display") display: Int=10
-    ): Response<SearchResponse>
+    ): Response<NaverSearchResponse>
 }

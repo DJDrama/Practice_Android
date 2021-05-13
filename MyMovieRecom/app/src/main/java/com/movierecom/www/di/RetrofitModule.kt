@@ -2,8 +2,11 @@ package com.movierecom.www.di
 
 import com.movierecom.www.api.KobisService
 import com.movierecom.www.api.NaverSearchService
+import com.movierecom.www.api.TmdbService
 import com.movierecom.www.util.KOBIS_BASE_URL
 import com.movierecom.www.util.NAVER_BASE_URL
+import com.movierecom.www.util.TMDB_BASE_URL
+import com.movierecom.www.util.TMDB_KEY
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -44,5 +47,11 @@ object RetrofitModule {
     @Provides
     fun provideKobisService(retrofit: Retrofit.Builder): KobisService {
         return retrofit.baseUrl(KOBIS_BASE_URL).build().create(KobisService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTmdbService(retrofit: Retrofit.Builder): TmdbService {
+        return retrofit.baseUrl(TMDB_BASE_URL).build().create(TmdbService::class.java)
     }
 }

@@ -2,7 +2,7 @@ package com.movierecom.www.api
 
 import com.movierecom.www.model.NaverMovie
 
-data class SearchResponse(
+data class NaverSearchResponse(
     val lastBuildDate: String,
     val total: Int,
     val start: Int,
