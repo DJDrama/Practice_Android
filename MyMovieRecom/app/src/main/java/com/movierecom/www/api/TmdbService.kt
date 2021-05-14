@@ -19,10 +19,10 @@ interface TmdbService {
         @Query(value = "include_adult") include_adult: Boolean = false,
     ): Response<TmdbMovieResponse>
 
-    @GET("{movieId}/videos")
+    @GET("movie/{movieId}/videos")
     suspend fun getTrailer(
+        @Path(value = "movieId") movieId: Int,
         @Query(value = "api_key") api_key: String = TMDB_KEY,
         @Query(value = "language") language: String = "ko-KR",
-        @Path(value = "movieId") movieId: Int,
     ): Response<TmdbTrailerResponse>
 }

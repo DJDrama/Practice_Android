@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.text.HtmlCompat
@@ -68,8 +69,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     }
                 })
         }
-        subscribeToObservers()
         viewModel.getTrailer(query = args.naverMovie.title)
+
+        subscribeToObservers()
     }
     private fun subscribeToObservers(){
         viewModel.trailer.observe(viewLifecycleOwner){
@@ -100,6 +102,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
                 override fun onReady(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.loadVideo(it, 0f)
+                    //youTubePlayer.setVolume(100)
                 }
 
                 override fun onStateChange(

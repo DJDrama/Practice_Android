@@ -1,5 +1,6 @@
 package com.movierecom.www.repository
 
+import android.util.Log
 import com.movierecom.www.api.KobisService
 import com.movierecom.www.api.NaverSearchService
 import com.movierecom.www.api.TmdbService
