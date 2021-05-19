@@ -69,7 +69,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     }
                 })
         }
-        viewModel.getTrailer(query = args.naverMovie.title)
+        viewModel.getTrailer(query = Html.fromHtml(args.naverMovie.title, Html.FROM_HTML_MODE_LEGACY).toString())
 
         subscribeToObservers()
     }
