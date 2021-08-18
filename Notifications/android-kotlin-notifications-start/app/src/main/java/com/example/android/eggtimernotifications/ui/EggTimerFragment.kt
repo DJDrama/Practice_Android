@@ -62,7 +62,9 @@ class EggTimerFragment : Fragment() {
                     channelId,
                     channelName,
                     NotificationManager.IMPORTANCE_HIGH // Heads Up Display With Sound and vibration
-                )
+                ).apply {
+                    setShowBadge(false)
+                }
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
             notificationChannel.enableVibration(true)
