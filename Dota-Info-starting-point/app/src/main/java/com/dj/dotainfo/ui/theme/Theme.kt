@@ -1,4 +1,4 @@
-package com.codingwithmitch.dotainfo.ui.theme
+package com.dj.dotainfo.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

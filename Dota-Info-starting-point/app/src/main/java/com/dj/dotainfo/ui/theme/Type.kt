@@ -1,4 +1,4 @@
-package com.codingwithmitch.dotainfo.ui.theme
+package com.dj.dotainfo.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.graphics.Color
@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.codingwithmitch.dotainfo.R
+import com.dj.dotainfo.R
 
 private val QuickSand = FontFamily(
     Font(R.font.quicksand_light, FontWeight.W300),
