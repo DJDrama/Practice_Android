@@ -3,23 +3,16 @@ package com.dj.dotainfo.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import com.dj.core.DataState
 import com.dj.core.Logger
 import com.dj.core.ProgressBarState
 import com.dj.core.UIComponent
 import com.dj.dotainfo.ui.theme.DotaInfoTheme
-import com.dj.hero_domain.Hero
 import com.dj.hero_interactors.HeroInteractors
+import com.dj.ui_herolist.HeroList
+import com.dj.ui_herolist.HeroListState
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -28,7 +21,7 @@ import kotlinx.coroutines.flow.onEach
 
 class MainActivity : ComponentActivity() {
 
-    private val heroes: MutableState<List<Hero>> = mutableStateOf(emptyList())
+    private val state: MutableState<HeroListState> = mutableStateOf(HeroListState())
     private val progressBarState: MutableState<ProgressBarState> =
         mutableStateOf(ProgressBarState.Idle)
 
@@ -57,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 is DataState.Data -> {
-                    heroes.value = dataState.data ?: emptyList()
+                    state.value = state.value.copy(heros = dataState.data ?: listOf())
                 }
                 is DataState.Loading -> {
                     progressBarState.value = dataState.progressBarState
@@ -69,16 +62,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             DotaInfoTheme {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    LazyColumn {
-                        items(heroes.value) { hero ->
-                            Text(text = hero.localizedName)
-                        }
-                    }
-                    if (progressBarState.value is ProgressBarState.Loading) {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                    }
-                }
+                HeroList(state = state.value)
             }
         }
     }
