@@ -1,4 +1,4 @@
-package com.dj.core
+package com.dj.core.util
 
 class Logger(
     private val tag: String,

@@ -6,8 +6,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dj.core.DataState
-import com.dj.core.Logger
 import com.dj.core.UIComponent
+import com.dj.core.util.Logger
 import com.dj.hero_interactors.GetHeroes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -20,9 +20,9 @@ class HeroListViewModel
 constructor(
     private val getHeroes: GetHeroes,
     private val savedStateHandle: SavedStateHandle,
+    private val logger: Logger,
 ) : ViewModel() {
 
-    val logger = Logger("HeroListViewModel")
     val state: MutableState<HeroListState> = mutableStateOf(HeroListState())
 
     init {
