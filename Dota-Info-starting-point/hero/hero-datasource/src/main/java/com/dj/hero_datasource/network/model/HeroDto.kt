@@ -1,4 +1,4 @@
-package com.dj.hero_datasource.network
+package com.dj.hero_datasource.network.model
 
 import com.dj.hero_datasource.network.EndPoints.BASE_URL
 import com.dj.hero_domain.Hero

@@ -3,6 +3,7 @@ apply {
 }
 
 plugins {
+    kotlin("jvm")
     kotlin(KotlinPlugins.serialization) version Kotlin.version
 }
 
