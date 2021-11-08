@@ -1,4 +1,4 @@
-package com.dj.ui_herolist
+package com.dj.ui_herolist.ui
 
 import com.dj.core.ProgressBarState
 import com.dj.hero_domain.Hero
