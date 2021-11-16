@@ -18,4 +18,6 @@ dependencies {
     "testImplementation"(Junit.junit4)
     "testImplementation"(Ktor.ktorClientMock)
     "testImplementation"(Ktor.clientSerialization)
+
+    "testImplementation"("org.jetbrains.kotlin:kotlin-test-junit:${Kotlin.version}")
 }
