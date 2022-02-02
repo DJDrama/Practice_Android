@@ -1,4 +1,4 @@
-package com.dj.core.domain
+package com.dj.core.data.preferences
 
 import android.content.SharedPreferences
 import com.dj.core.domain.model.ActivityLevel
@@ -86,6 +86,19 @@ class DefaultPreferences(
             carbRatio = carbRatio,
             proteinRatio = proteinRatio,
             fatRatio = fatRatio
+        )
+    }
+
+    override fun saveShouldShowOnboarding(shouldShow: Boolean) {
+        sharedPref.edit()
+            .putBoolean(Preferences.KEY_SHOULD_SHOW_ONBOARDING, shouldShow)
+            .apply()
+    }
+
+    override fun loadShouldShowOnboarding(): Boolean {
+        return sharedPref.getBoolean(
+            Preferences.KEY_SHOULD_SHOW_ONBOARDING,
+            true
         )
     }
 }
