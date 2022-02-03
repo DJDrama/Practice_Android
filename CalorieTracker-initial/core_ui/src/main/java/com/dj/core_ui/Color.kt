@@ -1,4 +1,4 @@
-package com.dj.calorytracker.ui.theme
+package com.dj.core_ui
 
 import androidx.compose.ui.graphics.Color
 

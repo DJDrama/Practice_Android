@@ -10,7 +10,7 @@ data class Dimension(
     val spaceSmall: Dp = 8.dp,
     val spaceMedium: Dp = 16.dp,
     val spaceLarge: Dp = 32.dp,
-    val extraLarge: Dp = 64.dp
+    val spaceExtraLarge: Dp = 64.dp
 )
 
 val LocalSpacing = compositionLocalOf {
