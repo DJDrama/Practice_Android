@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -13,6 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.dj.core.util.UiEvent
 import com.dj.core_ui.LocalSpacing
 import com.dj.tracker_presentation.tracker_overview.components.DaySelector
+import com.dj.tracker_presentation.tracker_overview.components.ExpandableMeal
 import com.dj.tracker_presentation.tracker_overview.components.NutrientHeader
 
 @Composable
@@ -27,7 +29,7 @@ fun TrackerOverviewScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = spacing.spaceMedium)
-    ){
+    ) {
         item {
             NutrientHeader(state = state)
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
@@ -39,9 +41,23 @@ fun TrackerOverviewScreen(
                 onNextDayClick = {
                     viewModel.onEvent(TrackerOverviewEvent.OnNextDayClick)
                 },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = spacing.spaceMedium)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = spacing.spaceMedium)
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
+        }
+        items(items = state.meals) { meal ->
+            ExpandableMeal(
+                meal = meal,
+                onToggleClick = {
+                    viewModel.onEvent(TrackerOverviewEvent.OnToggleMealClick(meal = meal))
+                },
+                content = {
+
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
