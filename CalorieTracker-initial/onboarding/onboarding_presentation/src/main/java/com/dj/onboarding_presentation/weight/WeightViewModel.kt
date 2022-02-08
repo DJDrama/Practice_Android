@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dj.core.domain.preferences.Preferences
-import com.dj.core.navigation.Route
 import com.dj.core.util.UiEvent
 import com.dj.core.util.UiText
 import com.dj.onboarding_presentation.R
@@ -47,7 +46,7 @@ constructor(
                 return@launch
             }
             preferences.saveWeight(weight = weightNumber)
-            _uiEvent.send(element = UiEvent.Navigate(route = Route.ACTIVITY))
+            _uiEvent.send(element = UiEvent.Success)
         }
     }
 }

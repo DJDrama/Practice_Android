@@ -28,14 +28,14 @@ import kotlinx.coroutines.flow.collect
 fun HeightScreen(
     scaffoldState: ScaffoldState,
     viewModel: HeightViewModel = hiltViewModel(),
-    onNavigate: (UiEvent.Navigate) -> Unit,
+    onNextClick: () -> Unit,
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is UiEvent.Navigate -> onNavigate(event)
+                is UiEvent.Success -> onNextClick()
                 is UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message.asString(context = context)

@@ -22,21 +22,20 @@ import com.dj.core_ui.LocalSpacing
 import com.dj.onboarding_presentation.R
 import com.dj.onboarding_presentation.components.ActionButton
 import com.dj.onboarding_presentation.components.UnitTextField
-import com.dj.onboarding_presentation.nutrient_goal.NutrientGoalEvent.OnNextClick
 import kotlinx.coroutines.flow.collect
 
 @Composable
 fun NutrientGoalScreen(
     scaffoldState: ScaffoldState,
     viewModel: NutrientGoalViewModel = hiltViewModel(),
-    onNavigate: (UiEvent.Navigate) -> Unit,
+    onNextClick: () -> Unit,
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is UiEvent.Navigate -> onNavigate(event)
+                is UiEvent.Success -> onNextClick()
                 is UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message.asString(context = context)

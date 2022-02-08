@@ -5,10 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dj.core.domain.model.ActivityLevel
 import com.dj.core.domain.model.GoalType
 import com.dj.core.domain.preferences.Preferences
-import com.dj.core.navigation.Route
 import com.dj.core.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -36,9 +34,7 @@ constructor(
     fun onNextClick() {
         viewModelScope.launch {
             preferences.saveGoalType(type = selectedGoal)
-            _uiEvent.send(element = UiEvent.Navigate(
-                route = Route.NUTRIENT_GOAL
-            ))
+            _uiEvent.send(element = UiEvent.Success)
         }
     }
 }

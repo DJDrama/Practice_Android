@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dj.core.domain.preferences.Preferences
 import com.dj.core.domain.use_case.FilterOutDigits
-import com.dj.core.navigation.Route
 import com.dj.core.util.UiEvent
 import com.dj.core.util.UiText
 import com.dj.onboarding_presentation.R
@@ -49,7 +48,7 @@ constructor(
                 return@launch
             }
             preferences.saveAge(age = ageNumber)
-            _uiEvent.send(element = UiEvent.Navigate(route = Route.HEIGHT))
+            _uiEvent.send(element = UiEvent.Success)
         }
     }
 }

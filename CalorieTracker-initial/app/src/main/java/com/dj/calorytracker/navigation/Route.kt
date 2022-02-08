@@ -1,4 +1,4 @@
-package com.dj.core.navigation
+package com.dj.calorytracker.navigation
 
 object Route {
     const val WELCOME = "welcome"
